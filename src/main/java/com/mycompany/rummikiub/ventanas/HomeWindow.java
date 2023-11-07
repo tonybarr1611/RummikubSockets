@@ -8,19 +8,23 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import com.mycompany.rummikiub.Cliente;
+
 /**
  *
  * @author barra
  */
 public class HomeWindow extends javax.swing.JFrame {
     private Socket socket;
+    private Cliente cliente;
     private String username;
 
     /**
      * Creates new form HomeWindow
      */
-    public HomeWindow(Socket socket){
+    public HomeWindow(Socket socket, Cliente cliente) {
         this.socket = socket;
+        this.cliente = cliente;
         initComponents();
     }
 
@@ -128,15 +132,11 @@ public class HomeWindow extends javax.swing.JFrame {
     }
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-        try {
-            DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
-            salida.writeInt(0002);
-            salida.writeUTF("Hola");
-            salida.writeUTF("Tony");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // TODO add your handling code here:
+        LobbyWindow lobbyWindow = new LobbyWindow(socket, username, cliente);
+        cliente.setCurrentWindow(lobbyWindow);
+        lobbyWindow.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
     /**
@@ -169,7 +169,7 @@ public class HomeWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomeWindow(null).setVisible(true);
+                new HomeWindow(null, null).setVisible(true);
             }
         });
     }

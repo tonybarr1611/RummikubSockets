@@ -21,7 +21,7 @@ public class Cliente {
             e.printStackTrace();
             return;
         }
-        currentWindow = new HomeWindow(socket);
+        currentWindow = new HomeWindow(socket, this);
         clienteSocketThread = new ClienteSocketThread(socket, this);
         clienteSocketThread.start();
         currentWindow.setVisible(true);
@@ -38,5 +38,9 @@ public class Cliente {
 
     public JFrame getCurrentWindow() {
         return currentWindow;
+    }
+
+    public void setCurrentWindow(JFrame currentWindow) {
+        this.currentWindow = currentWindow;
     }
 }

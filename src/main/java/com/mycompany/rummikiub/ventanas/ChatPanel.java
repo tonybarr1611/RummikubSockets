@@ -118,6 +118,7 @@ public class ChatPanel extends javax.swing.JPanel {
                 e.printStackTrace();
             }
         }
+        txfChat.setText("");
     }//GEN-LAST:event_btnEnviarChatActionPerformed
 
 

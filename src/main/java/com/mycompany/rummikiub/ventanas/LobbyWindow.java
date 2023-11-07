@@ -6,17 +6,23 @@ package com.mycompany.rummikiub.ventanas;
 
 import java.net.Socket;
 
+import com.mycompany.rummikiub.Cliente;
+
 /**
  *
  * @author barra
  */
 public class LobbyWindow extends javax.swing.JFrame {
-    Socket socket;
+    private Socket socket;
+    private String username;
+    private Cliente cliente;
     /**
      * Creates new form LobbyWindow
      */
-    public LobbyWindow(Socket socket) {
+    public LobbyWindow(Socket socket, String username, Cliente cliente) {
         this.socket = socket;
+        this.username = username;
+        this.cliente = cliente;
         initComponents();
     }
 
@@ -132,7 +138,7 @@ public class LobbyWindow extends javax.swing.JFrame {
     }
 
     public String getUsername(){
-        return "PENDING";
+        return username;
     }
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
@@ -173,7 +179,7 @@ public class LobbyWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LobbyWindow(null).setVisible(true);
+                new LobbyWindow(null, "", null).setVisible(true);
             }
         });
     }
