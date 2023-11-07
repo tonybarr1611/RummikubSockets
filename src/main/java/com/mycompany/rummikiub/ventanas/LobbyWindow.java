@@ -42,7 +42,7 @@ public class LobbyWindow extends javax.swing.JFrame {
         btnJugador4 = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
         btnIniciar = new javax.swing.JButton();
-        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel(socket);
+        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel(socket, this);
         bgImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -126,6 +126,14 @@ public class LobbyWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public ChatPanel getChatPanel(){
+        return chatPanel1;
+    }
+
+    public String getUsername(){
+        return "PENDING";
+    }
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:

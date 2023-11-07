@@ -18,10 +18,31 @@ public class SocketClienteThread extends Thread{
         this.server = server;
     }
 
+    public void sendUTF(String data){
+        try {
+            salida.writeUTF(data);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void sendInt(int data){
+        try {
+            salida.writeInt(data);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public void chat_in(){
         try {
             String mensaje = entrada.readUTF();
             String autor = entrada.readUTF();
+            server.broadcastInt(0001);
+            server.broadcastUTF(mensaje);
+            server.broadcastUTF(autor);
             System.out.println(autor + " : " + mensaje);
         } catch (IOException e) {
             // TODO Auto-generated catch block

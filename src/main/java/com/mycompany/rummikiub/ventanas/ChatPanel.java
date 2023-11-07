@@ -4,7 +4,11 @@
  */
 package com.mycompany.rummikiub.ventanas;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+
+import javax.swing.JFrame;
 
 /**
  *
@@ -12,11 +16,13 @@ import java.net.Socket;
  */
 public class ChatPanel extends javax.swing.JPanel {
     Socket socket;
+    JFrame parent;
     /**
      * Creates new form Chat
      */
-    public ChatPanel(Socket socket) {
+    public ChatPanel(Socket socket, JFrame parent) {
         this.socket = socket;
+        this.parent = parent;
         initComponents();
     }
 
@@ -67,8 +73,52 @@ public class ChatPanel extends javax.swing.JPanel {
         btnEnviarChat.setBackground(new java.awt.Color(51, 51, 51));
         btnEnviarChat.setForeground(new java.awt.Color(255, 255, 255));
         btnEnviarChat.setText("Enviar");
+        btnEnviarChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarChatActionPerformed(evt);
+            }
+        });
         add(btnEnviarChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, 130, -1));
     }// </editor-fold>//GEN-END:initComponents
+
+    public void disableChat(){
+        txfChat.setEnabled(false);
+        txaChat.setEnabled(false);
+        btnEnviarChat.setEnabled(false);
+    }
+
+    public void enableChat(){
+        txfChat.setEnabled(true);
+        btnEnviarChat.setEnabled(true);
+    }
+
+    private String getChatMessage(){
+        return txfChat.getText();
+    }
+
+    public void chat_in(String mensaje, String autor){
+        txaChat.append(autor + ": " + mensaje + "\n");
+    }
+
+    private void btnEnviarChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarChatActionPerformed
+        String mensaje = getChatMessage();
+        String autor;
+        if (parent instanceof HomeWindow) autor = ((HomeWindow) parent).getUsername();
+        else if (parent instanceof LobbyWindow) autor = ((LobbyWindow) parent).getUsername();
+        else autor = "PENDING";
+        if(mensaje.length() > 0){
+            DataOutputStream salida = null;
+            try {
+                salida = new DataOutputStream(socket.getOutputStream());
+                salida.writeInt(0002);
+                salida.writeUTF(mensaje);
+                salida.writeUTF(autor);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btnEnviarChatActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -30,4 +30,16 @@ public class Server {
         acceptThread.start();
     }
 
+    public void broadcastUTF(String data){
+        for (SocketClienteThread hilo : hilosClientes) {
+            hilo.sendUTF(data);
+        }
+    }
+
+    public void broadcastInt(int data){
+        for (SocketClienteThread hilo : hilosClientes) {
+            hilo.sendInt(data);
+        }
+    }
+
 }

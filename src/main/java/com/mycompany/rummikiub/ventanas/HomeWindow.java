@@ -14,6 +14,8 @@ import java.net.Socket;
  */
 public class HomeWindow extends javax.swing.JFrame {
     private Socket socket;
+    private String username;
+
     /**
      * Creates new form HomeWindow
      */
@@ -38,8 +40,13 @@ public class HomeWindow extends javax.swing.JFrame {
         btnUnirsePartida = new javax.swing.JButton();
         btnPartidaGuardada = new javax.swing.JButton();
         btnCrearPartida = new javax.swing.JButton();
-        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel(socket);
+        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel(socket, this);
         bgImage = new javax.swing.JLabel();
+
+        btnUnirsePartida.setEnabled(false);
+        btnPartidaGuardada.setEnabled(false);
+        btnCrearPartida.setEnabled(false);
+        chatPanel1.disableChat();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Rummikub");
@@ -65,6 +72,11 @@ public class HomeWindow extends javax.swing.JFrame {
         btnUsername.setBackground(new java.awt.Color(51, 51, 51));
         btnUsername.setForeground(new java.awt.Color(255, 255, 255));
         btnUsername.setText("Conectar");
+        btnUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsernameActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, -1, -1));
 
         btnUnirsePartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/UnirsePartida.png"))); // NOI18N
@@ -87,6 +99,33 @@ public class HomeWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public ChatPanel getChatPanel(){
+        return chatPanel1;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    private void btnUsernameActionPerformed(java.awt.event.ActionEvent evt){
+        username = txfUsername.getText();
+        if(username.length() > 0){
+            btnUnirsePartida.setEnabled(true);
+            btnPartidaGuardada.setEnabled(true);
+            btnCrearPartida.setEnabled(true);
+            chatPanel1.enableChat();
+            btnUsername.setEnabled(false);
+            txfUsername.setEnabled(false);
+            try {
+                DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
+                salida.writeUTF(username);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
         try {
