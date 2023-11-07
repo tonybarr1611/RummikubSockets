@@ -4,16 +4,21 @@
  */
 package com.mycompany.rummikiub.ventanas;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
 /**
  *
  * @author barra
  */
 public class HomeWindow extends javax.swing.JFrame {
-
+    private Socket socket;
     /**
      * Creates new form HomeWindow
      */
-    public HomeWindow() {
+    public HomeWindow(Socket socket){
+        this.socket = socket;
         initComponents();
     }
 
@@ -33,7 +38,7 @@ public class HomeWindow extends javax.swing.JFrame {
         btnUnirsePartida = new javax.swing.JButton();
         btnPartidaGuardada = new javax.swing.JButton();
         btnCrearPartida = new javax.swing.JButton();
-        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel();
+        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel(socket);
         bgImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -84,7 +89,15 @@ public class HomeWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-        // TODO add your handling code here:
+        try {
+            DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
+            salida.writeInt(0002);
+            salida.writeUTF("Hola");
+            salida.writeUTF("Tony");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
     /**
@@ -117,7 +130,7 @@ public class HomeWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomeWindow().setVisible(true);
+                new HomeWindow(null).setVisible(true);
             }
         });
     }

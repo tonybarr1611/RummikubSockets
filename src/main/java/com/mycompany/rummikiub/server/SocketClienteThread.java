@@ -5,6 +5,7 @@ import java.net.Socket;
 
 public class SocketClienteThread extends Thread{
     Socket cliente;
+    String username;
     Server server;
     boolean running = true;
 
@@ -15,6 +16,17 @@ public class SocketClienteThread extends Thread{
     public SocketClienteThread(Socket cliente, Server server) {
         this.cliente = cliente;
         this.server = server;
+    }
+
+    public void chat_in(){
+        try {
+            String mensaje = entrada.readUTF();
+            String autor = entrada.readUTF();
+            System.out.println(autor + " : " + mensaje);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     @Override
@@ -29,16 +41,23 @@ public class SocketClienteThread extends Thread{
            running = false;
         }
         try {
-            System.out.println(entrada.readUTF());
+            username = entrada.readUTF();
+            System.out.println("El cliente " + username + " se ha conectado");
         } catch (IOException e) {
             System.out.println("Error al leer el nombre del cliente : " + e.getMessage());
         }
         while(running){
             try {
                 // TODO: implementar protocolo de comunicacion
-                int mensaje = entrada.readInt();
-                System.out.println(mensaje);
-                salida.writeUTF("Hola cliente");
+                int opCode = entrada.readInt();
+                switch (opCode) {
+                    case 0002:
+                        chat_in();
+                        break;
+                    default:
+                        System.out.println("Codigo de operacion no reconocido");
+                        break;
+                }
             } catch (IOException e) {
                 System.out.println("Error al leer el mensaje del cliente : " + e.getMessage());
                 running = false;

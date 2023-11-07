@@ -4,16 +4,19 @@
  */
 package com.mycompany.rummikiub.ventanas;
 
+import java.net.Socket;
+
 /**
  *
  * @author barra
  */
 public class ChatPanel extends javax.swing.JPanel {
-
+    Socket socket;
     /**
      * Creates new form Chat
      */
-    public ChatPanel() {
+    public ChatPanel(Socket socket) {
+        this.socket = socket;
         initComponents();
     }
 

@@ -4,16 +4,19 @@
  */
 package com.mycompany.rummikiub.ventanas;
 
+import java.net.Socket;
+
 /**
  *
  * @author barra
  */
 public class LobbyWindow extends javax.swing.JFrame {
-
+    Socket socket;
     /**
      * Creates new form LobbyWindow
      */
-    public LobbyWindow() {
+    public LobbyWindow(Socket socket) {
+        this.socket = socket;
         initComponents();
     }
 
@@ -39,7 +42,7 @@ public class LobbyWindow extends javax.swing.JFrame {
         btnJugador4 = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
         btnIniciar = new javax.swing.JButton();
-        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel();
+        chatPanel1 = new com.mycompany.rummikiub.ventanas.ChatPanel(socket);
         bgImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -162,7 +165,7 @@ public class LobbyWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LobbyWindow().setVisible(true);
+                new LobbyWindow(null).setVisible(true);
             }
         });
     }
