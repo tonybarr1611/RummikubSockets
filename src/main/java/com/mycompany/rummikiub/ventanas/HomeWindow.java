@@ -133,10 +133,8 @@ public class HomeWindow extends javax.swing.JFrame {
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
         // TODO add your handling code here:
-        LobbyWindow lobbyWindow = new LobbyWindow(socket, username, cliente);
-        cliente.setCurrentWindow(lobbyWindow);
-        lobbyWindow.setVisible(true);
-        this.dispose();
+        CrearPartidaPopUp crearPartidaPopUp = new CrearPartidaPopUp(socket, username, cliente);
+        crearPartidaPopUp.setVisible(true);
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
     /**

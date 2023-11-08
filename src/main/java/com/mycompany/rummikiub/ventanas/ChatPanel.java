@@ -61,6 +61,7 @@ public class ChatPanel extends javax.swing.JPanel {
         txaChat.setRows(5);
         txaChat.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         txaChat.setOpaque(false);
+        txaChat.setEnabled(false);
         scpChatContainer.setViewportView(txaChat);
 
         add(scpChatContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 950, 110));

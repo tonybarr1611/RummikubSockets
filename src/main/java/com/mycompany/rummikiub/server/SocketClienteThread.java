@@ -36,7 +36,7 @@ public class SocketClienteThread extends Thread{
         }
     }
 
-    public void chat_in(){
+    private void chat_in(){
         try {
             String mensaje = entrada.readUTF();
             String autor = entrada.readUTF();
@@ -47,6 +47,23 @@ public class SocketClienteThread extends Thread{
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+    private void crear_Part(){
+        try {
+            // Leer y guardar datos de la partida
+            String nombrePartida = entrada.readUTF();
+            int cantidadJugadores = entrada.readInt();
+            server.crearPartida(username, nombrePartida, cantidadJugadores, cliente, this);
+
+            // Enviar datos de la partida al host
+            sendInt(0004);
+            sendUTF(username);
+            sendUTF(nombrePartida);
+            sendInt(cantidadJugadores);
+        } catch (Exception e) {
+            // TODO: handle exception
         }
     }
     
@@ -74,6 +91,11 @@ public class SocketClienteThread extends Thread{
                 switch (opCode) {
                     case 0002:
                         chat_in();
+                        break;
+                    case 0003:
+                        break;
+                    case 0004:
+                        crear_Part();
                         break;
                     default:
                         System.out.println("Codigo de operacion no reconocido");

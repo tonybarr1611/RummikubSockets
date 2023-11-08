@@ -22,6 +22,33 @@ public class ClienteSocketThread extends Thread{
     public void setUsername(String username) {
         this.username = username;
     }
+
+    private void chat_in(){
+        try {
+            String mensaje = entrada.readUTF();
+            String autor = entrada.readUTF();
+            if (clienteApp.getCurrentWindow() instanceof LobbyWindow) {
+                ((LobbyWindow) clienteApp.getCurrentWindow()).getChatPanel().chat_in(mensaje, autor);
+            } else if (clienteApp.getCurrentWindow() instanceof HomeWindow) {
+                ((HomeWindow) clienteApp.getCurrentWindow()).getChatPanel().chat_in(mensaje, autor);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private void crear_Part(){
+        try {
+            String host = entrada.readUTF();
+            String nombrePartida = entrada.readUTF();
+            int cantidadJugadores = entrada.readInt();
+            clienteApp.crearPartida(host, nombrePartida, cantidadJugadores);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     
     @Override
     public void run() {
@@ -36,16 +63,13 @@ public class ClienteSocketThread extends Thread{
                 int opCode = entrada.readInt();
                 switch (opCode) {
                     case 0001:
-                        String mensaje = entrada.readUTF();
-                        String autor = entrada.readUTF();
-                        if (clienteApp.getCurrentWindow() instanceof LobbyWindow) {
-                            ((LobbyWindow) clienteApp.getCurrentWindow()).getChatPanel().chat_in(mensaje, autor);
-                        } else if (clienteApp.getCurrentWindow() instanceof HomeWindow) {
-                            ((HomeWindow) clienteApp.getCurrentWindow()).getChatPanel().chat_in(mensaje, autor);
-                        }
+                        chat_in();
+                        break;
+                    case 0004:
+                        crear_Part();
                         break;
                     default:
-                        System.out.println("Codigo de operacion no reconocido");
+                        System.out.println("Codigo de operacion no reconocido: " + opCode);
                         break;
                 }
             } catch (IOException e) {

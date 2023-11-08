@@ -6,7 +6,11 @@ package com.mycompany.rummikiub.ventanas;
 
 import java.net.Socket;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
 import com.mycompany.rummikiub.Cliente;
+import com.mycompany.rummikiub.Partida;
 
 /**
  *
@@ -16,14 +20,21 @@ public class LobbyWindow extends javax.swing.JFrame {
     private Socket socket;
     private String username;
     private Cliente cliente;
+    private String host;
+    private String nombrePartida;
+    private int cantidadJugadores;
     /**
      * Creates new form LobbyWindow
      */
-    public LobbyWindow(Socket socket, String username, Cliente cliente) {
+    public LobbyWindow(Socket socket, String username, Cliente cliente, String host, String nombrePartida, int cantidadJugadores) {
         this.socket = socket;
         this.username = username;
         this.cliente = cliente;
+        this.host = host;
+        this.nombrePartida = nombrePartida;
+        this.cantidadJugadores = cantidadJugadores;
         initComponents();
+        setComponentsStatus(cantidadJugadores);
     }
 
     /**
@@ -141,6 +152,21 @@ public class LobbyWindow extends javax.swing.JFrame {
         return username;
     }
 
+    private void setComponentsStatus(int jugadores){
+        JLabel[] jugadoresLabels = {lblJugador1, lblJugador2, lblJugador3, lblJugador4};
+        JButton[] jugadoresButtons = {btnJugador1, btnJugador2, btnJugador3, btnJugador4};
+        for (int i = 0; i < 4; i++){
+            jugadoresLabels[i].setVisible(false);
+            jugadoresButtons[i].setVisible(false);
+        }
+        for (int i = 0; i < jugadores; i++){
+            jugadoresLabels[i].setVisible(true);
+            jugadoresButtons[i].setVisible(true);
+        }
+        btnIniciar.setEnabled(false);
+        btnCerrar.setEnabled(false);        
+    }
+
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCerrarActionPerformed
@@ -179,7 +205,7 @@ public class LobbyWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LobbyWindow(null, "", null).setVisible(true);
+                new LobbyWindow(null, "", null, "", "", 0).setVisible(true);
             }
         });
     }

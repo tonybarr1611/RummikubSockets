@@ -4,9 +4,12 @@
  */
 package com.mycompany.rummikiub.server;
 
+import java.io.DataOutput;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+
+import com.mycompany.rummikiub.Partida;
 
 /**
  *
@@ -18,6 +21,8 @@ public class Server {
     private ArrayList<Socket> clientes;
     private ArrayList<SocketClienteThread> hilosClientes;
 
+    private ArrayList<Partida> partidas;
+
     public Server(){
         try {
             serverSocket = new ServerSocket(777);
@@ -28,6 +33,7 @@ public class Server {
         hilosClientes = new ArrayList<SocketClienteThread>();
         acceptThread = new AcceptThread(this, serverSocket, clientes, hilosClientes);
         acceptThread.start();
+        partidas = new ArrayList<Partida>();
     }
 
     public void broadcastUTF(String data){
@@ -40,6 +46,12 @@ public class Server {
         for (SocketClienteThread hilo : hilosClientes) {
             hilo.sendInt(data);
         }
+    }
+
+    public void crearPartida(String username, String nombrePartida, int cantidadJugadores, Socket cliente, SocketClienteThread hilo){
+        Partida partida = new Partida(username, nombrePartida, cantidadJugadores, cliente, hilo);
+        partidas.add(partida);
+        System.out.println("Partida creada: " + nombrePartida + " de " + username + " para " + cantidadJugadores + " jugadores");
     }
 
 }
