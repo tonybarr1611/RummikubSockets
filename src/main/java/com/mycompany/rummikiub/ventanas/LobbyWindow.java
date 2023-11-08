@@ -5,6 +5,7 @@
 package com.mycompany.rummikiub.ventanas;
 
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,18 +24,20 @@ public class LobbyWindow extends javax.swing.JFrame {
     private String host;
     private String nombrePartida;
     private int cantidadJugadores;
+    private ArrayList<String> jugadores;
     /**
      * Creates new form LobbyWindow
      */
-    public LobbyWindow(Socket socket, String username, Cliente cliente, String host, String nombrePartida, int cantidadJugadores) {
+    public LobbyWindow(Socket socket, String username, Cliente cliente, String host, String nombrePartida, int cantidadJugadores, ArrayList<String> jugadores) {
         this.socket = socket;
         this.username = username;
         this.cliente = cliente;
         this.host = host;
         this.nombrePartida = nombrePartida;
         this.cantidadJugadores = cantidadJugadores;
+        this.jugadores = jugadores;
         initComponents();
-        setComponentsStatus(cantidadJugadores);
+        setComponentsStatus();
     }
 
     /**
@@ -152,14 +155,26 @@ public class LobbyWindow extends javax.swing.JFrame {
         return username;
     }
 
-    private void setComponentsStatus(int jugadores){
+    public void setJugadores(ArrayList<String> jugadores){
+        this.jugadores = jugadores;
+        setComponentsStatus();
+    }
+
+    public void addJugador(String jugador){
+        jugadores.add(jugador);
+        setComponentsStatus();
+    }
+
+    private void setComponentsStatus(){
         JLabel[] jugadoresLabels = {lblJugador1, lblJugador2, lblJugador3, lblJugador4};
         JButton[] jugadoresButtons = {btnJugador1, btnJugador2, btnJugador3, btnJugador4};
+        lblJugadores.setText("Jugadores (" + jugadores.size() + "/"  + cantidadJugadores + ")");
         for (int i = 0; i < 4; i++){
             jugadoresLabels[i].setVisible(false);
             jugadoresButtons[i].setVisible(false);
         }
-        for (int i = 0; i < jugadores; i++){
+        for (int i = 0; i < jugadores.size(); i++){
+            jugadoresLabels[i].setText(jugadores.get(i));
             jugadoresLabels[i].setVisible(true);
             jugadoresButtons[i].setVisible(true);
         }
@@ -205,7 +220,7 @@ public class LobbyWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LobbyWindow(null, "", null, "", "", 0).setVisible(true);
+                new LobbyWindow(null, "", null, "", "", 0, null).setVisible(true);
             }
         });
     }

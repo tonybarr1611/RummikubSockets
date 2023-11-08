@@ -85,6 +85,11 @@ public class HomeWindow extends javax.swing.JFrame {
 
         btnUnirsePartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/UnirsePartida.png"))); // NOI18N
         getContentPane().add(btnUnirsePartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 170, 200, 260));
+        btnUnirsePartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnirsePartidaActionPerformed(evt);
+            }
+        });
 
         btnPartidaGuardada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/CargarPartida.png"))); // NOI18N
         getContentPane().add(btnPartidaGuardada, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 170, 200, 260));
@@ -121,6 +126,7 @@ public class HomeWindow extends javax.swing.JFrame {
             chatPanel1.enableChat();
             btnUsername.setEnabled(false);
             txfUsername.setEnabled(false);
+            cliente.getClienteSocketThread().setUsername(username);
             try {
                 DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
                 salida.writeUTF(username);
@@ -131,10 +137,17 @@ public class HomeWindow extends javax.swing.JFrame {
         }
     }
 
+    private void btnUnirsePartidaActionPerformed(java.awt.event.ActionEvent evt){
+        PartidasDisponibles partidasDisponibles = new PartidasDisponibles(cliente.getPartidas(), cliente);
+        partidasDisponibles.setVisible(true);
+    }
+
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
         // TODO add your handling code here:
         CrearPartidaPopUp crearPartidaPopUp = new CrearPartidaPopUp(socket, username, cliente);
         crearPartidaPopUp.setVisible(true);
+        crearPartidaPopUp.setIconImage(this.getIconImage());
+        crearPartidaPopUp.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
     /**

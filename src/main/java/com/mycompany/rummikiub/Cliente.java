@@ -2,7 +2,9 @@ package com.mycompany.rummikiub;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -45,12 +47,28 @@ public class Cliente {
         this.currentWindow = currentWindow;
     }
 
-    public void crearPartida(String username, String nombrePartida, int cantidadJugadores){
-        LobbyWindow lw = new LobbyWindow(socket, username, this, username, nombrePartida, cantidadJugadores);
+    public void crearPartida(String username, String nombrePartida, int cantidadJugadores, ArrayList<String> jugadores){
+        LobbyWindow lw = new LobbyWindow(socket, username, this, username, nombrePartida, cantidadJugadores, jugadores);
         lw.setVisible(true);
         lw.setIconImage(img);
         lw.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         currentWindow.dispose();
         currentWindow = lw;
+    }
+
+    public ArrayList<String[]> getPartidas(){
+        return clienteSocketThread.getPartidas();
+    }
+
+    public ClienteSocketThread getClienteSocketThread(){
+        return clienteSocketThread;
+    }
+
+    public void sendUTF(String data){
+        clienteSocketThread.sendUTF(data);
+    }
+
+    public void sendInt(int data){
+        clienteSocketThread.sendInt(data);
     }
 }

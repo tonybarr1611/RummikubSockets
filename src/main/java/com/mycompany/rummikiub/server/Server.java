@@ -54,4 +54,8 @@ public class Server {
         System.out.println("Partida creada: " + nombrePartida + " de " + username + " para " + cantidadJugadores + " jugadores");
     }
 
+    public ArrayList<Partida> getPartidas(){
+        return partidas;
+    }
+
 }

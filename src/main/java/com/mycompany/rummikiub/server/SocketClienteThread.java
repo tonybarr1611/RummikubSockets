@@ -1,7 +1,11 @@
 package com.mycompany.rummikiub.server;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import com.mycompany.rummikiub.Partida;
 
 public class SocketClienteThread extends Thread{
     Socket cliente;
@@ -16,6 +20,10 @@ public class SocketClienteThread extends Thread{
     public SocketClienteThread(Socket cliente, Server server) {
         this.cliente = cliente;
         this.server = server;
+    }
+
+    public String getUsername(){
+        return username;
     }
 
     public void sendUTF(String data){
@@ -62,11 +70,67 @@ public class SocketClienteThread extends Thread{
             sendUTF(username);
             sendUTF(nombrePartida);
             sendInt(cantidadJugadores);
+            sendUTF(username);
+            sendUTF("9999");
         } catch (Exception e) {
             // TODO: handle exception
         }
     }
+
+    private void send_part(String username, String nombrePartida, int cantidadJugadores, ArrayList<String> jugadores){
+        sendInt(0004);
+        sendUTF(username);
+        sendUTF(nombrePartida);
+        sendInt(cantidadJugadores);
+        for (String jugador : jugadores) {
+            sendUTF(jugador);
+        }
+        sendUTF("9999");
+        try {
+            salida.flush();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     
+    private void enviar_partidas(){
+        ArrayList<Partida> partidas = server.getPartidas();
+        try {
+            sendInt(0003);
+            sendInt(partidas.size());
+            for (Partida partida : partidas) {
+                sendUTF(partida.getHost());
+                sendUTF(partida.getNombre());
+                sendInt(partida.getJugadoresActuales());
+                sendInt(partida.getCantidadJugadores());
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+    }
+
+    private void join_Part(){
+        try {
+            String indexPartida = entrada.readUTF();
+            int index = Integer.parseInt(indexPartida);
+            ArrayList<Partida> partidas = server.getPartidas();
+            Partida partida = partidas.get(index);
+            partida.addJugador(cliente, this);
+            ArrayList<Socket> jugadores = partida.getJugadores();
+            ArrayList<SocketClienteThread> hilosJugadores = partida.getHilosJugadores();
+            for (SocketClienteThread hilo : hilosJugadores) {
+                hilo.sendInt(0005);
+                hilo.sendUTF(username);
+            }
+            send_part(partida.getHost(), partida.getNombre(), partida.getCantidadJugadores(), partida.getJugadoresNombres());
+        } catch (Exception e) {
+        }
+    }
+
+
+
     @Override
     public void run() {
         
@@ -93,9 +157,13 @@ public class SocketClienteThread extends Thread{
                         chat_in();
                         break;
                     case 0003:
+                        enviar_partidas();
                         break;
                     case 0004:
                         crear_Part();
+                        break;
+                    case 8:
+                        join_Part();
                         break;
                     default:
                         System.out.println("Codigo de operacion no reconocido");
