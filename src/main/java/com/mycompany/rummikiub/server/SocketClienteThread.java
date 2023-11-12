@@ -127,15 +127,34 @@ public class SocketClienteThread extends Thread{
             send_part(partida.getHost(), partida.getNombre(), partida.getCantidadJugadores(), partida.getJugadoresNombres());
             if (jugadores.size() == partida.getCantidadJugadores()){
                 server.iniciarPartida(partida.getNombre(), partida.getHost());
-                for (SocketClienteThread hilo : hilosJugadores) {
-                    hilo.sendInt(0007);
-                }
             }
         } catch (Exception e) {
         }
     }
 
-
+    private void sendMove(){
+        try {   
+            String ficha = entrada.readUTF();
+            String posOrigen = entrada.readUTF();
+            String posFinal = entrada.readUTF();
+            String isComodin = entrada.readUTF();
+            ArrayList<Partida> partidas = server.getPartidas();
+            for (Partida partida : partidas) {
+                if (partida.getJugadores().contains(cliente)){
+                    for (Socket jugador : partida.getJugadores()) {
+                            SocketClienteThread hilo = partida.getHilosJugadores().get(partida.getJugadores().indexOf(jugador));
+                            hilo.sendInt(9);
+                            hilo.sendUTF(ficha);
+                            hilo.sendUTF(posOrigen);
+                            hilo.sendUTF(posFinal);
+                            hilo.sendUTF(isComodin);
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+    
 
     @Override
     public void run() {
@@ -155,6 +174,7 @@ public class SocketClienteThread extends Thread{
             System.out.println("Error al leer el nombre del cliente : " + e.getMessage());
         }
         while(running){
+            renovarStreams();
             try {
                 // TODO: implementar protocolo de comunicacion
                 int opCode = entrada.readInt();
@@ -172,6 +192,13 @@ public class SocketClienteThread extends Thread{
                     case 8:
                         join_Part();
                         break;
+                    case 9:
+                        sendMove();
+                        break;
+                    case 1:
+                        System.out.println("recibido 1");
+                        salida.writeInt(2);
+                        break;
                     default:
                         System.out.println("Codigo de operacion no reconocido");
                         break;
@@ -180,6 +207,25 @@ public class SocketClienteThread extends Thread{
                 System.out.println("Error al leer el mensaje del cliente : " + e.getMessage());
                 running = false;
             }
+        }
+    }
+
+    private void renovarStreams(){
+        try {
+            entrada = new DataInputStream(cliente.getInputStream());
+            salida = new DataOutputStream(cliente.getOutputStream());
+        } catch (IOException e) {
+           System.out.println("Error al crear los streams de entrada y salida : " + e.getMessage());
+           running = false;
+        }
+    }
+
+    public void flushOutput(){
+        try {
+            salida.flush();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

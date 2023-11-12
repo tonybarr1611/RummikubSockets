@@ -132,7 +132,21 @@ public class ClienteSocketThread extends Thread{
         clienteApp.getCurrentWindow().dispose();
         clienteApp.setCurrentWindow(new GameGUI(cliente, clienteApp, username, cantidadJugadores, jugadores, mazo));
         clienteApp.getCurrentWindow().setVisible(true);
+        return;
     }
+
+    // private void registerMove(){
+    //     try {
+    //         String carta = entrada.readUTF();
+    //         String posOrigen = entrada.readUTF();
+    //         String posFinal = entrada.readUTF();
+    //         String isComodin = entrada.readUTF();
+    //         if (clienteApp.getCurrentWindow() instanceof GameGUI) {
+    //             ((GameGUI) clienteApp.getCurrentWindow()).registerMove(carta, posOrigen, posFinal, isComodin);
+    //         }
+    //     } catch (Exception e) {
+    //     }
+    // }
 
     @Override
     public void run() {
@@ -162,6 +176,12 @@ public class ClienteSocketThread extends Thread{
                             break;
                         case 0007:
                             cargar_Part();
+                            break;
+                        case 11:
+                            // registerMove();
+                            break;
+                        case 2:
+                            System.out.println("recibido 1");
                             break;
                         default:
                             System.out.println("Codigo de operacion no reconocido: " + opCode);

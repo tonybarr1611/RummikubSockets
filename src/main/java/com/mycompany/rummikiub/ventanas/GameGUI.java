@@ -22,6 +22,8 @@ public class GameGUI extends javax.swing.JFrame {
     private ArrayList<String> jugadores;
     private String matrizJuego[][] = new String[6][18];
     private ArrayList<String> mazoJugador = new ArrayList<String>();
+    private Ficha currentFicha = null;
+    private boolean currentFichaPos = false;
 
     /**
      * Creates new form testing
@@ -64,7 +66,7 @@ public class GameGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gameGrid2 = new com.mycompany.rummikiub.ventanas.GameGrid(matrizJuego);
+        gameGrid2 = new com.mycompany.rummikiub.ventanas.GameGrid(matrizJuego, this);
         mazoJugador2 = new com.mycompany.rummikiub.ventanas.MazoJugador();
         userCircle1 = new com.mycompany.rummikiub.ventanas.UserCircle();
         userCircle2 = new com.mycompany.rummikiub.ventanas.UserCircle();
@@ -85,6 +87,13 @@ public class GameGUI extends javax.swing.JFrame {
         getContentPane().add(mazoJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 580, 1220, 180));
         for(int i = 0; i < mazoJugador.size(); i++){
             mazoJugador2.addFicha(mazoJugador.get(i));
+            mazoJugador2.getFichas().get(i).addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    currentFicha = (Ficha) evt.getSource();
+                    currentFichaPos = false;
+                    System.out.println("Ficha clickeada " + currentFicha.getColor());
+                }
+            });
         }
 
         UserCircle userCircles[] = {userCircle1, userCircle2, userCircle3};
@@ -117,8 +126,37 @@ public class GameGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTerminarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarTurnoActionPerformed
-        // TODO add your handling code here:
+        clienteApp.sendInt(1);
     }//GEN-LAST:event_btnTerminarTurnoActionPerformed
+
+    public void removeFicha(){
+        try {
+            mazoJugador2.remove(currentFicha);
+            mazoJugador2.revalidate();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    public Ficha getCurrentFicha(){
+        return currentFicha;
+    }
+
+    public void setCurrentFicha(Ficha ficha){
+        currentFicha = ficha;
+    }
+
+    public boolean getCurrentFichaPos(){
+        return currentFichaPos;
+    }
+
+    public void setCurrentFichaPos(boolean pos){
+        currentFichaPos = pos;
+    }
+
+    public Cliente getClienteApp(){
+        return clienteApp;
+    }
 
     /**
      * @param args the command line arguments

@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * @author barra
  */
 public class MazoJugador extends javax.swing.JPanel {
-    int i = 0;
     ArrayList<Ficha> fichas = new ArrayList<Ficha>();
     /**
      * Creates new form MazoJugador
@@ -32,23 +31,17 @@ public class MazoJugador extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(2, 10));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Ficha ficha = new Ficha(++i, "rojo", false, 0);
-        ficha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("Ficha clickeada " + ficha.getColor());
-            }
-        });
-        // i++;
-        this.add(ficha);
-        this.revalidate();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     public void addFicha(String codigoFicha){
-        Ficha ficha = new Ficha(Integer.parseInt(codigoFicha.substring(4)), codigoFicha.substring(0, 4), false, 0);
+        Ficha ficha;
+        if (codigoFicha.equals("como")) ficha = new Ficha(0, "comodin", true, 0, -1, -1);
+        else ficha = new Ficha(Integer.parseInt(codigoFicha.substring(4)), codigoFicha.substring(0, 4), false, 0, -1, -1);
         fichas.add(ficha);
         this.add(ficha);
         this.revalidate();
+    }
+
+    public ArrayList<Ficha> getFichas(){
+        return fichas;
     }
 
 

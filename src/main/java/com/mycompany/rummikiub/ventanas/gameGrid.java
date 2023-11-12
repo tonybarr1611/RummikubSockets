@@ -4,16 +4,20 @@
  */
 package com.mycompany.rummikiub.ventanas;
 
+import com.mycompany.rummikiub.Cliente;
+
 /**
  *
  * @author barra
  */
 public class GameGrid extends javax.swing.JPanel {
     private Ficha[][] fichas  = new Ficha[6][18];
+    private GameGUI gameGUI;
     /**
      * Creates new form gameGrid
      */
-    public GameGrid(String matrizJuego[][]) {
+    public GameGrid(String matrizJuego[][], GameGUI gameGUI) {
+        this.gameGUI = gameGUI;
         initComponents();
         createGrid(matrizJuego);
     }
@@ -29,14 +33,47 @@ public class GameGrid extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(6, 18));
     }// </editor-fold>//GEN-END:initComponents
     
+    public Ficha[][] getFichas(){
+        return fichas;
+    }
+
     public void createGrid(String matrizJuego[][]){
         for (int i = 0; i < 6; i++){
             for (int j = 0; j < 18; j++){
                 if (matrizJuego[i][j] == "T")
-                    fichas[i][j] = new Ficha(-1, "tablero", false, 0);
-                else
-                    fichas[i][j] = new Ficha(Integer.parseInt(matrizJuego[i][j].substring(4)), matrizJuego[i][j].substring(0, 4), false, 0);
+                    fichas[i][j] = new Ficha(-1, "tablero", false, 0, i, j);
+                else{
+                    if (matrizJuego[i][j] == "como")
+                        fichas[i][j] = new Ficha(0, "comodin", true, 0, i, j);
+                    else
+                        fichas[i][j] = new Ficha(Integer.parseInt(matrizJuego[i][j].substring(4)), matrizJuego[i][j].substring(0, 4), false, 0, i, j);
+                }
                 this.add(fichas[i][j]);
+                fichas[i][j].addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        if (gameGUI.getCurrentFicha() != null && (Ficha)evt.getSource() != gameGUI.getCurrentFicha() && (((Ficha)evt.getSource()).getColor().equals("tablero") || gameGUI.getCurrentFichaPos())){
+                            // Cliente cliente = gameGUI.getClienteApp();
+                            Ficha ficha = (Ficha) evt.getSource();
+                            // String comodin = "0";
+                            // if (ficha.getComodin()) comodin = "1";
+                            // cliente.sendInt(9);
+                            // cliente.sendUTF(ficha.getColor() + ficha.getNumero());
+                            // cliente.sendUTF(gameGUI.getCurrentFicha().getI() + " " + gameGUI.getCurrentFicha().getJ());
+                            // cliente.sendUTF(ficha.getI() + " " + ficha.getJ());
+                            // cliente.sendUTF(comodin);
+                            Ficha temp = new Ficha();
+                            temp.morph(ficha);
+                            ficha.morph(gameGUI.getCurrentFicha());
+                            gameGUI.getCurrentFicha().morph(temp);
+                            if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
+                            gameGUI.setCurrentFicha(null);
+                            gameGUI.setCurrentFichaPos(false);
+                        }else{
+                            gameGUI.setCurrentFicha((Ficha) evt.getSource());
+                            gameGUI.setCurrentFichaPos(true);
+                        }
+                    }
+                });
             }
         }
     }
