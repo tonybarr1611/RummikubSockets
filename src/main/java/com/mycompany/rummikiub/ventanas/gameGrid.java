@@ -55,17 +55,24 @@ public class GameGrid extends javax.swing.JPanel {
                             Cliente cliente = gameGUI.getClienteApp();
                             Ficha ficha = (Ficha) evt.getSource();
                             String comodin = "0";
+                            if (gameGUI.getCurrentFicha().getComodin()) comodin = "1";
+                            if (gameGUI.getCurrentFichaPos()){
+                                cliente.sendInt(9); // opcode
+                                cliente.sendUTF(gameGUI.getCurrentFicha().getI() + " " + gameGUI.getCurrentFicha().getJ()); // pos
+                                cliente.sendUTF(ficha.getColor() + "" + ficha.getNumero()); // ficha
+                                cliente.sendUTF(comodin); // isComodin
+                            }
+                            comodin = "0";
                             if (ficha.getComodin()) comodin = "1";
-                            cliente.sendInt(9);
-                            cliente.sendUTF(gameGUI.getCurrentFicha().getColor() + "" + gameGUI.getCurrentFicha().getNumero());
-                            cliente.sendUTF(gameGUI.getCurrentFicha().getI() + " " + gameGUI.getCurrentFicha().getJ());
-                            cliente.sendUTF(ficha.getI() + " " + ficha.getJ());
-                            cliente.sendUTF(comodin);
+                            cliente.sendInt(9); // opcode
+                            cliente.sendUTF(ficha.getI() + " " + ficha.getJ()); // pos
+                            cliente.sendUTF(gameGUI.getCurrentFicha().getColor() + "" + gameGUI.getCurrentFicha().getNumero()); // ficha
+                            cliente.sendUTF(comodin); // isComodin
                             // Ficha temp = new Ficha();
                             // temp.morph(ficha);
                             // ficha.morph(gameGUI.getCurrentFicha());
                             // gameGUI.getCurrentFicha().morph(temp);
-                            // if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
+                            if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
                             gameGUI.setCurrentFicha(null);
                             gameGUI.setCurrentFichaPos(false);
                         }else{

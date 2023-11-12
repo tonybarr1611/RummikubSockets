@@ -134,9 +134,8 @@ public class SocketClienteThread extends Thread{
 
     private void sendMove(){
         try {   
+            String pos = entrada.readUTF();
             String ficha = entrada.readUTF();
-            String posOrigen = entrada.readUTF();
-            String posFinal = entrada.readUTF();
             String isComodin = entrada.readUTF();
             ArrayList<Partida> partidas = server.getPartidas();
             for (Partida partida : partidas) {
@@ -144,9 +143,8 @@ public class SocketClienteThread extends Thread{
                     for (Socket jugador : partida.getJugadores()) {
                             SocketClienteThread hilo = partida.getHilosJugadores().get(partida.getJugadores().indexOf(jugador));
                             hilo.sendInt(9);
+                            hilo.sendUTF(pos);
                             hilo.sendUTF(ficha);
-                            hilo.sendUTF(posOrigen);
-                            hilo.sendUTF(posFinal);
                             hilo.sendUTF(isComodin);
                     }
                 }

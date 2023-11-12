@@ -137,12 +137,11 @@ public class ClienteSocketThread extends Thread{
 
     private void registerMove(){
         try {
+            String pos = entrada.readUTF();
             String carta = entrada.readUTF();
-            String posOrigen = entrada.readUTF();
-            String posFinal = entrada.readUTF();
             String isComodin = entrada.readUTF();
             if (clienteApp.getCurrentWindow() instanceof GameGUI) {
-                ((GameGUI) clienteApp.getCurrentWindow()).registerMove(carta, posOrigen, posFinal, isComodin);
+                ((GameGUI) clienteApp.getCurrentWindow()).registerMove(carta, pos, isComodin);
             }
         } catch (Exception e) {
         }

@@ -129,34 +129,43 @@ public class GameGUI extends javax.swing.JFrame {
         clienteApp.sendInt(1);
     }//GEN-LAST:event_btnTerminarTurnoActionPerformed
 
-    public void registerMove(String codigoFicha, String pos1, String pos2, String comodin){
-        int i1 = Integer.parseInt(pos1.split(" ")[0]);
-        int j1 = Integer.parseInt(pos1.split(" ")[1]);
-        int i2 = Integer.parseInt(pos2.split(" ")[0]);
-        int j2 = Integer.parseInt(pos2.split(" ")[1]);
-        Ficha ficha1;
-        if (codigoFicha.length() < 5 || codigoFicha.length() > 6){
-            if(codigoFicha.equals("como")) ficha1 = new Ficha(0, "comodin", true, 0, i1, j1);
-            else if (codigoFicha.length() > 7 && codigoFicha.contains("table")) ficha1 = new Ficha(-1, "tablero", false, 0, i1, j1);
-            else ficha1 = new Ficha(Integer.parseInt(codigoFicha.substring(4)), codigoFicha.substring(0, 4), false, 0, i1, j1);
+    public void registerMove(String codigoFicha, String pos, String comodin){
+        int i = Integer.parseInt(pos.split(" ")[0]);
+        int j = Integer.parseInt(pos.split(" ")[1]);
+        int numero;
+        String color;
+        if (codigoFicha.equals("tablero-1")){
+            numero = -1;
+            color = "tablero";
+        }else if (codigoFicha.contains("como")){
+            numero = 0;
+            color = "comodin";
+        }else{
+            numero = Integer.parseInt(codigoFicha.substring(4));
+            color = codigoFicha.substring(0, 4);
         }
-        else if (i1 == -1) ficha1 = new Ficha(Integer.parseInt(codigoFicha.substring(4)), codigoFicha.substring(0, 4), comodin.equals("1"), 0, i1, j1);
-        else ficha1 = gameGrid2.getFichas()[i1][j1];
-        Ficha ficha2 = gameGrid2.getFichas()[i2][j2];
-        Ficha temp = new Ficha();
-        temp.morph(ficha1);
-        ficha1.morph(ficha2);
-        ficha2.morph(temp);
-        if (i1 == -1) remove(ficha2);
-        else gameGrid2.getFichas()[i1][j1] = ficha2;
-        gameGrid2.getFichas()[i2][j2] = ficha1;
-        gameGrid2.revalidate();
+        boolean isComodin = comodin.equals("1");
+        matrizJuego[i][j] = codigoFicha;
+        gameGrid2.getFichas()[i][j].setNumero(numero);
+        gameGrid2.getFichas()[i][j].setColor(color);
+        gameGrid2.getFichas()[i][j].setComodin(isComodin);
+        gameGrid2.getFichas()[i][j].setI(i);
+        gameGrid2.getFichas()[i][j].setJ(j);
+        String iconPath = "/com/mycompany/rummikiub/assets/fichas/" + color + "/" + numero + ".png";
+        if (numero == -1)
+            iconPath = "/com/mycompany/rummikiub/assets/fichas/tablero.png";
+        if (isComodin)
+            iconPath = "/com/mycompany/rummikiub/assets/fichas/comodin.jpg";
+        gameGrid2.getFichas()[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource(iconPath)));
+        gameGrid2.getFichas()[i][j].revalidate();
+        gameGrid2.getFichas()[i][j].repaint();
     }
 
     public void removeFicha(){
         try {
             mazoJugador2.remove(currentFicha);
             mazoJugador2.revalidate();
+            mazoJugador2.repaint();
         } catch (Exception e) {
             // TODO: handle exception
         }
