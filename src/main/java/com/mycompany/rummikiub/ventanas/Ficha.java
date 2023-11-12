@@ -77,10 +77,12 @@ public class Ficha extends JButton{
     }
 
     public void morph(Ficha ficha){
-        this.numero = ficha.getNumero();
-        this.color = ficha.getColor();
+        this.numero = ficha.getNumero() + 0;
+        this.color = ficha.getColor() + "";
         this.comodin = ficha.getComodin();
-        this.icon_path = ficha.getIconPath();
+        this.icon_path = ficha.getIconPath() + "";
         super.setIcon(new javax.swing.ImageIcon(getClass().getResource(icon_path)));
+        this.i = ficha.getI();
+        this.j = ficha.getJ();
     }
 }

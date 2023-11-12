@@ -135,18 +135,18 @@ public class ClienteSocketThread extends Thread{
         return;
     }
 
-    // private void registerMove(){
-    //     try {
-    //         String carta = entrada.readUTF();
-    //         String posOrigen = entrada.readUTF();
-    //         String posFinal = entrada.readUTF();
-    //         String isComodin = entrada.readUTF();
-    //         if (clienteApp.getCurrentWindow() instanceof GameGUI) {
-    //             ((GameGUI) clienteApp.getCurrentWindow()).registerMove(carta, posOrigen, posFinal, isComodin);
-    //         }
-    //     } catch (Exception e) {
-    //     }
-    // }
+    private void registerMove(){
+        try {
+            String carta = entrada.readUTF();
+            String posOrigen = entrada.readUTF();
+            String posFinal = entrada.readUTF();
+            String isComodin = entrada.readUTF();
+            if (clienteApp.getCurrentWindow() instanceof GameGUI) {
+                ((GameGUI) clienteApp.getCurrentWindow()).registerMove(carta, posOrigen, posFinal, isComodin);
+            }
+        } catch (Exception e) {
+        }
+    }
 
     @Override
     public void run() {
@@ -177,8 +177,8 @@ public class ClienteSocketThread extends Thread{
                         case 0007:
                             cargar_Part();
                             break;
-                        case 11:
-                            // registerMove();
+                        case 9:
+                            registerMove();
                             break;
                         case 2:
                             System.out.println("recibido 1");

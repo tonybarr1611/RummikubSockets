@@ -52,20 +52,20 @@ public class GameGrid extends javax.swing.JPanel {
                 fichas[i][j].addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         if (gameGUI.getCurrentFicha() != null && (Ficha)evt.getSource() != gameGUI.getCurrentFicha() && (((Ficha)evt.getSource()).getColor().equals("tablero") || gameGUI.getCurrentFichaPos())){
-                            // Cliente cliente = gameGUI.getClienteApp();
+                            Cliente cliente = gameGUI.getClienteApp();
                             Ficha ficha = (Ficha) evt.getSource();
-                            // String comodin = "0";
-                            // if (ficha.getComodin()) comodin = "1";
-                            // cliente.sendInt(9);
-                            // cliente.sendUTF(ficha.getColor() + ficha.getNumero());
-                            // cliente.sendUTF(gameGUI.getCurrentFicha().getI() + " " + gameGUI.getCurrentFicha().getJ());
-                            // cliente.sendUTF(ficha.getI() + " " + ficha.getJ());
-                            // cliente.sendUTF(comodin);
-                            Ficha temp = new Ficha();
-                            temp.morph(ficha);
-                            ficha.morph(gameGUI.getCurrentFicha());
-                            gameGUI.getCurrentFicha().morph(temp);
-                            if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
+                            String comodin = "0";
+                            if (ficha.getComodin()) comodin = "1";
+                            cliente.sendInt(9);
+                            cliente.sendUTF(gameGUI.getCurrentFicha().getColor() + "" + gameGUI.getCurrentFicha().getNumero());
+                            cliente.sendUTF(gameGUI.getCurrentFicha().getI() + " " + gameGUI.getCurrentFicha().getJ());
+                            cliente.sendUTF(ficha.getI() + " " + ficha.getJ());
+                            cliente.sendUTF(comodin);
+                            // Ficha temp = new Ficha();
+                            // temp.morph(ficha);
+                            // ficha.morph(gameGUI.getCurrentFicha());
+                            // gameGUI.getCurrentFicha().morph(temp);
+                            // if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
                             gameGUI.setCurrentFicha(null);
                             gameGUI.setCurrentFichaPos(false);
                         }else{

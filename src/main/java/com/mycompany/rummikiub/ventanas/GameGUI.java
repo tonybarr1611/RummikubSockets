@@ -129,6 +129,30 @@ public class GameGUI extends javax.swing.JFrame {
         clienteApp.sendInt(1);
     }//GEN-LAST:event_btnTerminarTurnoActionPerformed
 
+    public void registerMove(String codigoFicha, String pos1, String pos2, String comodin){
+        int i1 = Integer.parseInt(pos1.split(" ")[0]);
+        int j1 = Integer.parseInt(pos1.split(" ")[1]);
+        int i2 = Integer.parseInt(pos2.split(" ")[0]);
+        int j2 = Integer.parseInt(pos2.split(" ")[1]);
+        Ficha ficha1;
+        if (codigoFicha.length() < 5 || codigoFicha.length() > 6){
+            if(codigoFicha.equals("como")) ficha1 = new Ficha(0, "comodin", true, 0, i1, j1);
+            else if (codigoFicha.length() > 7 && codigoFicha.contains("table")) ficha1 = new Ficha(-1, "tablero", false, 0, i1, j1);
+            else ficha1 = new Ficha(Integer.parseInt(codigoFicha.substring(4)), codigoFicha.substring(0, 4), false, 0, i1, j1);
+        }
+        else if (i1 == -1) ficha1 = new Ficha(Integer.parseInt(codigoFicha.substring(4)), codigoFicha.substring(0, 4), comodin.equals("1"), 0, i1, j1);
+        else ficha1 = gameGrid2.getFichas()[i1][j1];
+        Ficha ficha2 = gameGrid2.getFichas()[i2][j2];
+        Ficha temp = new Ficha();
+        temp.morph(ficha1);
+        ficha1.morph(ficha2);
+        ficha2.morph(temp);
+        if (i1 == -1) remove(ficha2);
+        else gameGrid2.getFichas()[i1][j1] = ficha2;
+        gameGrid2.getFichas()[i2][j2] = ficha1;
+        gameGrid2.revalidate();
+    }
+
     public void removeFicha(){
         try {
             mazoJugador2.remove(currentFicha);
