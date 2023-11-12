@@ -8,12 +8,12 @@ package com.mycompany.rummikiub.ventanas;
  *
  * @author barra
  */
-public class userCircle extends javax.swing.JPanel {
+public class UserCircle extends javax.swing.JPanel {
 
     /**
      * Creates new form userCircle
      */
-    public userCircle() {
+    public UserCircle() {
         initComponents();
     }
 
@@ -37,8 +37,10 @@ public class userCircle extends javax.swing.JPanel {
         lblName.setForeground(new java.awt.Color(0, 0, 0));
         lblName.setText("name");
         add(lblName);
-        lblName.setBounds(30, 40, 37, 16);
+        lblName.setBounds(10, 20, 80, 60);
 
+        lblCantidadFichas.setBackground(new java.awt.Color(255, 255, 255));
+        lblCantidadFichas.setForeground(new java.awt.Color(255, 255, 255));
         lblCantidadFichas.setText("n fichas");
         add(lblCantidadFichas);
         lblCantidadFichas.setBounds(30, 100, 100, 30);
@@ -48,6 +50,21 @@ public class userCircle extends javax.swing.JPanel {
         lblMarco.setBounds(0, 0, 100, 100);
     }// </editor-fold>//GEN-END:initComponents
 
+
+    public void setNombre(String nombre){
+        lblName.setText(nombre);
+    }
+
+    public void setCantidadFichas(int cantidadFichas){
+        lblCantidadFichas.setText(cantidadFichas + " fichas");
+    }
+
+    public void setMarco(boolean enUso){
+        if (enUso)
+            lblMarco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/marcoCurrent.png")));
+        else
+            lblMarco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/marco.png")));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblCantidadFichas;

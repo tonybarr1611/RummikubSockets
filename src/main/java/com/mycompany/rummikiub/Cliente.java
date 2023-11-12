@@ -51,6 +51,7 @@ public class Cliente {
         LobbyWindow lw = new LobbyWindow(socket, username, this, username, nombrePartida, cantidadJugadores, jugadores);
         lw.setVisible(true);
         lw.setIconImage(img);
+        if (jugadores.size() == 1) lw.toggleIniciar();
         lw.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         currentWindow.dispose();
         currentWindow = lw;

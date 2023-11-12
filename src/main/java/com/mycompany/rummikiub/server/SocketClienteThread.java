@@ -125,6 +125,12 @@ public class SocketClienteThread extends Thread{
                 hilo.sendUTF(username);
             }
             send_part(partida.getHost(), partida.getNombre(), partida.getCantidadJugadores(), partida.getJugadoresNombres());
+            if (jugadores.size() == partida.getCantidadJugadores()){
+                server.iniciarPartida(partida.getNombre(), partida.getHost());
+                for (SocketClienteThread hilo : hilosJugadores) {
+                    hilo.sendInt(0007);
+                }
+            }
         } catch (Exception e) {
         }
     }
@@ -152,6 +158,7 @@ public class SocketClienteThread extends Thread{
             try {
                 // TODO: implementar protocolo de comunicacion
                 int opCode = entrada.readInt();
+                System.out.println(opCode);
                 switch (opCode) {
                     case 0002:
                         chat_in();

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
-
+import com.mycompany.rummikiub.ventanas.GameGUI;
 import com.mycompany.rummikiub.ventanas.HomeWindow;
 import com.mycompany.rummikiub.ventanas.LobbyWindow;
 
@@ -59,8 +59,9 @@ public class ClienteSocketThread extends Thread{
                     break;
                 jugadores.add(jugador);
             }
-            if (jugadores.size() == 1)
+            if (jugadores.size() == 1){
                 clienteApp.crearPartida(host, nombrePartida, cantidadJugadores, jugadores);
+            }
             else
                 clienteApp.crearPartida(username, nombrePartida, cantidadJugadores, jugadores);
         } catch (Exception e) {
@@ -115,7 +116,24 @@ public class ClienteSocketThread extends Thread{
         } catch (Exception e) {
         }
     }
-    
+
+    private void cargar_Part(){
+        ArrayList<String> mazo = new ArrayList<String>();
+        for (int i = 0; i < 14; i++) {
+            try {
+                String carta = entrada.readUTF();
+                System.out.println(carta);
+                mazo.add(carta);
+            } catch (Exception e) {
+            }
+        }
+        int cantidadJugadores = ((LobbyWindow)clienteApp.getCurrentWindow()).getCantidadJugadores();
+        ArrayList<String> jugadores = ((LobbyWindow)clienteApp.getCurrentWindow()).getJugadores();
+        clienteApp.getCurrentWindow().dispose();
+        clienteApp.setCurrentWindow(new GameGUI(cliente, clienteApp, username, cantidadJugadores, jugadores, mazo));
+        clienteApp.getCurrentWindow().setVisible(true);
+    }
+
     @Override
     public void run() {
         try {
@@ -129,6 +147,7 @@ public class ClienteSocketThread extends Thread{
             if (!pause){
                 try {
                     int opCode = entrada.readInt();
+                    System.out.println(opCode);
                     switch (opCode) {
                         case 0001:
                             chat_in();
@@ -140,6 +159,9 @@ public class ClienteSocketThread extends Thread{
                             break;
                         case 0005:
                             addPlayerLobby();
+                            break;
+                        case 0007:
+                            cargar_Part();
                             break;
                         default:
                             System.out.println("Codigo de operacion no reconocido: " + opCode);

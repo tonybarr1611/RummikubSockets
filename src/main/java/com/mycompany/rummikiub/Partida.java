@@ -15,11 +15,22 @@ public class Partida {
     private ArrayList<SocketClienteThread> hilosJugadores;
     
     private int[][] matriz;
+    private ArrayList<String> mazo;
     
     public Partida(){
         jugadores = new ArrayList<Socket>();
         jugadoresNombres = new ArrayList<String>();
         hilosJugadores = new ArrayList<SocketClienteThread>();
+        mazo = new ArrayList<String>();
+        String colores[] = {"rojo", "azul", "nara", "negr"};
+        for (int i = 0; i < 4; i++){
+            for (int j = 1; j < 14; j++){
+                mazo.add(colores[i] + j);
+                mazo.add(colores[i] + j);
+            }
+        }
+        mazo.add("como");
+        mazo.add("como");
     }
 
     public Partida(String username, String nombrePartida, int cantidadJugadores, Socket cliente, SocketClienteThread hilo){
@@ -33,6 +44,25 @@ public class Partida {
         jugadoresNombres.add(username);
         hilosJugadores = new ArrayList<SocketClienteThread>();
         hilosJugadores.add(hilo);
+        mazo = new ArrayList<String>();
+        String colores[] = {"rojo", "azul", "nara", "negr"};
+        for (int i = 0; i < 4; i++){
+            for (int j = 1; j < 14; j++){
+                mazo.add(colores[i] + j);
+                mazo.add(colores[i] + j);
+            }
+        }
+        mazo.add("como");
+        mazo.add("como");
+    }
+
+    public void repartirCartas(SocketClienteThread hilo){
+        for (int i = 0; i < 14; i++){
+            int random = (int) (Math.random() * mazo.size());
+            System.out.println(mazo.get(random));
+            hilo.sendUTF(mazo.get(random));
+            mazo.remove(random);
+        }
     }
 
     public void addJugador(Socket cliente, SocketClienteThread hilo){

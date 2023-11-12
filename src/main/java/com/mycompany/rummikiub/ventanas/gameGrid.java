@@ -8,13 +8,14 @@ package com.mycompany.rummikiub.ventanas;
  *
  * @author barra
  */
-public class gameGrid extends javax.swing.JPanel {
+public class GameGrid extends javax.swing.JPanel {
     private Ficha[][] fichas  = new Ficha[6][18];
     /**
      * Creates new form gameGrid
      */
-    public gameGrid() {
+    public GameGrid(String matrizJuego[][]) {
         initComponents();
+        createGrid(matrizJuego);
     }
 
     /**
@@ -25,26 +26,17 @@ public class gameGrid extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        createGrid();
         setLayout(new java.awt.GridLayout(6, 18));
     }// </editor-fold>//GEN-END:initComponents
     
-    public void createGrid(){
-        String colors[] = {"azul", "naranja", "negro", "rojo"};
+    public void createGrid(String matrizJuego[][]){
         for (int i = 0; i < 6; i++){
-            int t = i;
-            if (i == 0 || i > 3) t = 0;
             for (int j = 0; j < 18; j++){
-                int p = j;
-                if (j == 0 || j > 12) p = 1;
-                Ficha ficha = new Ficha(p, colors[t], false, 0);
-                fichas[i][j] = ficha;
+                if (matrizJuego[i][j] == "T")
+                    fichas[i][j] = new Ficha(-1, "tablero", false, 0);
+                else
+                    fichas[i][j] = new Ficha(Integer.parseInt(matrizJuego[i][j].substring(4)), matrizJuego[i][j].substring(0, 4), false, 0);
                 this.add(fichas[i][j]);
-                fichas[i][j].addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        System.out.println("Ficha clickeada " + ficha.getColor());
-                    }
-                });
             }
         }
     }

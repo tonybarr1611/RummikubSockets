@@ -4,12 +4,15 @@
  */
 package com.mycompany.rummikiub.ventanas;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author barra
  */
 public class MazoJugador extends javax.swing.JPanel {
     int i = 0;
+    ArrayList<Ficha> fichas = new ArrayList<Ficha>();
     /**
      * Creates new form MazoJugador
      */
@@ -26,17 +29,7 @@ public class MazoJugador extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-
         setLayout(new java.awt.GridLayout(2, 10));
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        add(jButton1);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -51,8 +44,14 @@ public class MazoJugador extends javax.swing.JPanel {
         this.revalidate();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void addFicha(String codigoFicha){
+        Ficha ficha = new Ficha(Integer.parseInt(codigoFicha.substring(4)), codigoFicha.substring(0, 4), false, 0);
+        fichas.add(ficha);
+        this.add(ficha);
+        this.revalidate();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

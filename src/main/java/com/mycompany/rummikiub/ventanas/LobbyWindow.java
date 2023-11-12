@@ -151,8 +151,20 @@ public class LobbyWindow extends javax.swing.JFrame {
         return chatPanel1;
     }
 
+    public void toggleIniciar(){
+        btnIniciar.setEnabled(true);
+    }
+
     public String getUsername(){
         return username;
+    }
+
+    public int getCantidadJugadores(){
+        return cantidadJugadores;
+    }
+
+    public ArrayList<String> getJugadores(){
+        return jugadores;
     }
 
     public void setJugadores(ArrayList<String> jugadores){

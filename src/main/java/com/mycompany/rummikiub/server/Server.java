@@ -54,6 +54,18 @@ public class Server {
         System.out.println("Partida creada: " + nombrePartida + " de " + username + " para " + cantidadJugadores + " jugadores");
     }
 
+    public void iniciarPartida(String nombrePartida, String host){
+        for (Partida partida : partidas) {
+            if (partida.getNombre().equals(nombrePartida) && partida.getHost().equals(host)){
+                for (SocketClienteThread hilo : partida.getHilosJugadores()) {
+                    hilo.sendInt(0007);
+                    partida.repartirCartas(hilo);
+                }
+            }
+        }
+
+    }
+
     public ArrayList<Partida> getPartidas(){
         return partidas;
     }
