@@ -26,24 +26,24 @@ public class testing extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gameGrid1 = new com.mycompany.rummikiub.ventanas.gameGrid();
+        gameGrid2 = new com.mycompany.rummikiub.ventanas.gameGrid();
+        mazoJugador2 = new com.mycompany.rummikiub.ventanas.MazoJugador();
+        bgImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(gameGrid1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        gameGrid2.setBackground(new java.awt.Color(0, 0, 0, 0));
+        gameGrid2.setOpaque(false);
+        getContentPane().add(gameGrid2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 770, 520));
+
+        mazoJugador2.setBackground(new java.awt.Color(0, 0, 0, 0)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(gameGrid1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        mazoJugador2.setOpaque(false);
+        getContentPane().add(mazoJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 1220, 200));
+
+        bgImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/gameBackground.jpg"))); // NOI18N
+        getContentPane().add(bgImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1220, 770));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -84,6 +84,8 @@ public class testing extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.rummikiub.ventanas.gameGrid gameGrid1;
+    private javax.swing.JLabel bgImage;
+    private com.mycompany.rummikiub.ventanas.gameGrid gameGrid2;
+    private com.mycompany.rummikiub.ventanas.MazoJugador mazoJugador2;
     // End of variables declaration//GEN-END:variables
 }

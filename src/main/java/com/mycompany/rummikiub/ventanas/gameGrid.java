@@ -30,10 +30,21 @@ public class gameGrid extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     
     public void createGrid(){
+        String colors[] = {"azul", "naranja", "negro", "rojo"};
         for (int i = 0; i < 6; i++){
+            int t = i;
+            if (i == 0 || i > 3) t = 0;
             for (int j = 0; j < 18; j++){
-                fichas[i][j] = new Ficha(-1, "", false, 0);
+                int p = j;
+                if (j == 0 || j > 12) p = 1;
+                Ficha ficha = new Ficha(p, colors[t], false, 0);
+                fichas[i][j] = ficha;
                 this.add(fichas[i][j]);
+                fichas[i][j].addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        System.out.println("Ficha clickeada " + ficha.getColor());
+                    }
+                });
             }
         }
     }
