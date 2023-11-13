@@ -16,6 +16,8 @@ public class Partida {
     
     private int[][] matriz;
     private ArrayList<String> mazo;
+
+    private int turno = 0;
     
     public Partida(){
         jugadores = new ArrayList<Socket>();
@@ -69,6 +71,21 @@ public class Partida {
         jugadores.add(cliente);
         jugadoresNombres.add(hilo.getUsername());
         hilosJugadores.add(hilo);
+    }
+
+    public void sendTurnos(){
+        for (int i = 0; i < hilosJugadores.size(); i++){
+            if (i != turno){ // no host
+                hilosJugadores.get(i).sendInt(15);
+                hilosJugadores.get(i).sendUTF(turno + "");
+            }else{ // host
+                hilosJugadores.get(i).sendInt(16);
+            }
+        }
+        if (turno == hilosJugadores.size() - 1)
+            turno = 0;
+        else
+            turno++;
     }
 
     public String getNombre() {

@@ -147,6 +147,25 @@ public class ClienteSocketThread extends Thread{
         }
     }
 
+    private void turnoNoHost(){
+        try {
+            String turno = entrada.readUTF();
+            if (clienteApp.getCurrentWindow() instanceof GameGUI) {
+                ((GameGUI) clienteApp.getCurrentWindow()).turnoNoHost(turno);
+            }
+        } catch (Exception e) {
+        }
+    }
+    
+    private void turnoHost(){
+        try {
+            if (clienteApp.getCurrentWindow() instanceof GameGUI) {
+                ((GameGUI) clienteApp.getCurrentWindow()).turnoHost();
+            }
+        } catch (Exception e) {
+        }
+    }
+
     @Override
     public void run() {
         try {
@@ -181,6 +200,12 @@ public class ClienteSocketThread extends Thread{
                             break;
                         case 2:
                             System.out.println("recibido 1");
+                            break;
+                        case 15:
+                            turnoNoHost();
+                            break;
+                        case 16:
+                            turnoHost();
                             break;
                         default:
                             System.out.println("Codigo de operacion no reconocido: " + opCode);

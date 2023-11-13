@@ -25,6 +25,8 @@ public class GameGUI extends javax.swing.JFrame {
     private Ficha currentFicha = null;
     private boolean currentFichaPos = false;
 
+    private boolean turno = false;
+    
     /**
      * Creates new form testing
      */
@@ -89,9 +91,11 @@ public class GameGUI extends javax.swing.JFrame {
             mazoJugador2.addFicha(mazoJugador.get(i));
             mazoJugador2.getFichas().get(i).addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    currentFicha = (Ficha) evt.getSource();
-                    currentFichaPos = false;
-                    System.out.println("Ficha clickeada " + currentFicha.getColor());
+                    if (getTurno()){
+                        currentFicha = (Ficha) evt.getSource();
+                        currentFichaPos = false;
+                        System.out.println("Ficha clickeada " + currentFicha.getColor());
+                    }
                 }
             });
         }
@@ -171,6 +175,18 @@ public class GameGUI extends javax.swing.JFrame {
         }
     }
 
+    public void turnoNoHost(String index){
+        btnTerminarTurno.setEnabled(false);
+        turno = false;
+        currentFicha = null;
+    }
+
+    public void turnoHost(){
+        btnTerminarTurno.setEnabled(true);
+        turno = true;
+        currentFicha = null;
+    }
+
     public Ficha getCurrentFicha(){
         return currentFicha;
     }
@@ -189,6 +205,10 @@ public class GameGUI extends javax.swing.JFrame {
 
     public Cliente getClienteApp(){
         return clienteApp;
+    }
+
+    public boolean getTurno(){
+        return turno;
     }
 
     /**

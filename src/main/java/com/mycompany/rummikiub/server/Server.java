@@ -61,6 +61,7 @@ public class Server {
                     hilo.sendInt(0007);
                     partida.repartirCartas(hilo);
                 }
+                partida.sendTurnos();
             }
         }
 
