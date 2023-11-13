@@ -108,7 +108,6 @@ public class GameGUI extends javax.swing.JFrame {
         for (int i = 0; i < cantidadJugadores; i++){
             if (!(jugadores.get(i).equals(username))){
                 userCircles[i].setNombre(jugadores.get(i));
-                userCircles[i].setCantidadFichas(14);
                 userCircles[i].setMarco(false);
                 userCircles[i].setBackground(new java.awt.Color(0, 0, 0, 0));
                 userCircles[i].setOpaque(false);

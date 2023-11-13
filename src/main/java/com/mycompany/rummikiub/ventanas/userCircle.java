@@ -27,7 +27,6 @@ public class UserCircle extends javax.swing.JPanel {
     private void initComponents() {
 
         lblName = new javax.swing.JLabel();
-        lblCantidadFichas = new javax.swing.JLabel();
         lblMarco = new javax.swing.JLabel();
 
         setLayout(null);
@@ -39,12 +38,6 @@ public class UserCircle extends javax.swing.JPanel {
         add(lblName);
         lblName.setBounds(10, 20, 80, 60);
 
-        lblCantidadFichas.setBackground(new java.awt.Color(255, 255, 255));
-        lblCantidadFichas.setForeground(new java.awt.Color(255, 255, 255));
-        lblCantidadFichas.setText("n fichas");
-        add(lblCantidadFichas);
-        lblCantidadFichas.setBounds(30, 100, 100, 30);
-
         lblMarco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/marco.png"))); // NOI18N
         add(lblMarco);
         lblMarco.setBounds(0, 0, 100, 100);
@@ -55,10 +48,6 @@ public class UserCircle extends javax.swing.JPanel {
         lblName.setText(nombre);
     }
 
-    public void setCantidadFichas(int cantidadFichas){
-        lblCantidadFichas.setText(cantidadFichas + " fichas");
-    }
-
     public void setMarco(boolean enUso){
         if (enUso)
             lblMarco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/marcoCurrent.png")));
@@ -67,7 +56,6 @@ public class UserCircle extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblCantidadFichas;
     private javax.swing.JLabel lblMarco;
     private javax.swing.JLabel lblName;
     // End of variables declaration//GEN-END:variables
