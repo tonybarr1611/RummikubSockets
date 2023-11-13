@@ -14,7 +14,8 @@ public class Partida {
     private ArrayList<Socket> jugadores;
     private ArrayList<SocketClienteThread> hilosJugadores;
     
-    private int[][] matriz;
+    private String[][] matriz = new String[6][18];
+    private String[][] matrizBackup = new String[6][18];
     private ArrayList<String> mazo;
 
     private int turno = 0;
@@ -88,6 +89,16 @@ public class Partida {
             turno++;
     }
 
+    public void registrarMovimiento(String pos, String ficha, String isComodin){
+        int j = Integer.parseInt((pos.split(" "))[0]);
+        int k = Integer.parseInt((pos.split(" "))[1]);
+        if (isComodin.equals("1"))
+            matriz[j][k] = "como";
+        else{
+            matriz[j][k] = ficha;
+        }
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -118,5 +129,221 @@ public class Partida {
 
     public int getJugadoresActuales(){
         return jugadores.size();
+    }
+
+    public boolean checkMatrix(){
+        boolean check = true;
+        int cont = 0;
+        int numero;
+        for (int i = 0; i < 6; i++){
+            for (int j = 0; j < 18; j++){
+                if (matriz[i][j].contains("tab"))
+                    continue;
+                if (matriz[i][j].contains("como"))
+                    continue;
+                if (matriz[i][j].contains("negr")){
+                    cont = 1;
+                    numero = Integer.parseInt(matriz[i][j].substring(4));
+                    if (matriz[i][j+1].substring(4).equals((numero+1) + "")){
+                        for (int k = j + 1; k < 18; k++){
+                            if ((matriz[i][k].contains("negr") && matriz[i][k].equals((numero+1) + "")) || matriz[i][k].contains("como")){
+                                cont++;
+                                numero++;
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Negras: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else if(matriz[i][j+1].substring(4).equals(numero + "") && !(matriz[i][j+1].contains("negr"))){
+                        ArrayList<String> colores = new ArrayList<String>();
+                        colores.add("azul");
+                        colores.add("rojo");
+                        colores.add("nara");
+                        for (int k = j + 1; k < 18; k++){
+                            if (matriz[i][k].contains("como") || (!(matriz[i][k].contains("tab")) && matriz[i][k].substring(4).equals((numero) + ""))){
+                                for(String color : colores){
+                                    if (matriz[i][k].contains(color)){
+                                        cont++;
+                                        colores.remove(color);
+                                        break;
+                                    }
+                                }
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Negras: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else{
+                        check = false;
+                        return check;
+                    }
+                }if (matriz[i][j].contains("rojo")){
+                    cont = 1;
+                    numero = Integer.parseInt(matriz[i][j].substring(4));
+                    if (matriz[i][j+1].substring(4).equals((numero+1) + "")){
+                        for (int k = j + 1; k < 18; k++){
+                            if ((matriz[i][k].contains("rojo") && matriz[i][k].equals((numero+1) + "")) || matriz[i][k].contains("como")){
+                                cont++;
+                                numero++;
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Rojas: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else if(matriz[i][j+1].substring(4).equals(numero + "") && !(matriz[i][j+1].contains("rojo"))){
+                        ArrayList<String> colores = new ArrayList<String>();
+                        colores.add("azul");
+                        colores.add("negr");
+                        colores.add("nara");
+                        for (int k = j + 1; k < 18; k++){
+                            if (matriz[i][k].contains("como") || (!(matriz[i][k].contains("tab")) && matriz[i][k].substring(4).equals((numero) + ""))){
+                                for(String color : colores){
+                                    if (matriz[i][k].contains(color)){
+                                        cont++;
+                                        colores.remove(color);
+                                        break;
+                                    }
+                                }
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Rojas: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else{
+                        check = false;
+                        return check;
+                    }
+                }if (matriz[i][j].contains("azul")){
+                    cont = 1;
+                    numero = Integer.parseInt(matriz[i][j].substring(4));
+                    if (matriz[i][j+1].substring(4).equals((numero+1) + "")){
+                        for (int k = j + 1; k < 18; k++){
+                            if ((matriz[i][k].contains("azul") && matriz[i][k].equals((numero+1) + "")) || matriz[i][k].contains("como")){
+                                cont++;
+                                numero++;
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Azules: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else if(matriz[i][j+1].substring(4).equals(numero + "") && !(matriz[i][j+1].contains("azul"))){
+                        ArrayList<String> colores = new ArrayList<String>();
+                        colores.add("rojo");
+                        colores.add("negr");
+                        colores.add("nara");
+                        for (int k = j + 1; k < 18; k++){
+                            if (matriz[i][k].contains("como") || (!(matriz[i][k].contains("tab")) && matriz[i][k].substring(4).equals((numero) + ""))){
+                                for(String color : colores){
+                                    if (matriz[i][k].contains(color)){
+                                        cont++;
+                                        colores.remove(color);
+                                        break;
+                                    }
+                                }
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Rojas: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else{
+                        check = false;
+                        return check;
+                    }
+                }if (matriz[i][j].contains("nara")){
+                    cont = 1;
+                    numero = Integer.parseInt(matriz[i][j].substring(4));
+                    if (matriz[i][j+1].substring(4).equals((numero+1) + "")){
+                        for (int k = j + 1; k < 18; k++){
+                            if ((matriz[i][k].contains("nara") && matriz[i][k].equals((numero+1) + "")) || matriz[i][k].contains("como")){
+                                cont++;
+                                numero++;
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Rojas: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else if(matriz[i][j+1].substring(4).equals(numero + "") && !(matriz[i][j+1].contains("nara"))){
+                        ArrayList<String> colores = new ArrayList<String>();
+                        colores.add("rojo");
+                        colores.add("negr");
+                        colores.add("nara");
+                        for (int k = j + 1; k < 18; k++){
+                            if (matriz[i][k].contains("como") || (!(matriz[i][k].contains("tab")) && matriz[i][k].substring(4).equals((numero) + ""))){
+                                for(String color : colores){
+                                    if (matriz[i][k].contains(color)){
+                                        cont++;
+                                        colores.remove(color);
+                                        break;
+                                    }
+                                }
+                            }else{
+                                if (cont < 3)
+                                    check = false;
+                                System.out.println("Rojas: " + cont);
+                            }
+                        }
+                        if (cont < 3){
+                            check = false;
+                            return check;
+                        }
+                        j += cont - 1;
+                        continue;
+                    }else{
+                        check = false;
+                        return check;
+                    }
+                }
+            }
+        }
+        return check;
     }
 }

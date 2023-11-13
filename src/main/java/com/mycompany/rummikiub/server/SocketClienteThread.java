@@ -147,6 +147,7 @@ public class SocketClienteThread extends Thread{
                             hilo.sendUTF(ficha);
                             hilo.sendUTF(isComodin);
                     }
+                    partida.registrarMovimiento(pos, ficha, isComodin);
                 }
             }
         } catch (Exception e) {
