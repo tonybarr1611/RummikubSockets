@@ -59,8 +59,10 @@ public class Server {
             if (partida.getNombre().equals(nombrePartida) && partida.getHost().equals(host)){
                 for (SocketClienteThread hilo : partida.getHilosJugadores()) {
                     hilo.sendInt(0007);
+                    hilo.sendUTF(partida.getCantidadJugadores() + "");
                     partida.repartirCartas(hilo);
                 }
+                partida.sendTurnos();
             }
         }
 

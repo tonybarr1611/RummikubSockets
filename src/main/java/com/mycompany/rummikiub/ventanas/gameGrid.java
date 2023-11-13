@@ -51,33 +51,36 @@ public class GameGrid extends javax.swing.JPanel {
                 this.add(fichas[i][j]);
                 fichas[i][j].addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        if (gameGUI.getCurrentFicha() != null && (Ficha)evt.getSource() != gameGUI.getCurrentFicha() && (((Ficha)evt.getSource()).getColor().equals("tablero") || gameGUI.getCurrentFichaPos())){
-                            Cliente cliente = gameGUI.getClienteApp();
-                            Ficha ficha = (Ficha) evt.getSource();
-                            String comodin = "0";
-                            if (gameGUI.getCurrentFicha().getComodin()) comodin = "1";
-                            if (gameGUI.getCurrentFichaPos()){
+                        if (gameGUI.getTurno()){
+                            if (gameGUI.getCurrentFicha() != null && (Ficha)evt.getSource() != gameGUI.getCurrentFicha() && (((Ficha)evt.getSource()).getColor().equals("tablero") || gameGUI.getCurrentFichaPos())){
+                                Cliente cliente = gameGUI.getClienteApp();
+                                Ficha ficha = (Ficha) evt.getSource();
+                                String comodin = "0";
+                                if (gameGUI.getCurrentFicha().getComodin()) comodin = "1";
+                                if (gameGUI.getCurrentFichaPos()){
+                                    cliente.sendInt(9); // opcode
+                                    cliente.sendUTF(gameGUI.getCurrentFicha().getI() + " " + gameGUI.getCurrentFicha().getJ()); // pos
+                                    cliente.sendUTF(ficha.getColor() + "" + ficha.getNumero()); // ficha
+                                    cliente.sendUTF(comodin); // isComodin
+                                }
+                                comodin = "0";
+                                if (ficha.getComodin()) comodin = "1";
                                 cliente.sendInt(9); // opcode
-                                cliente.sendUTF(gameGUI.getCurrentFicha().getI() + " " + gameGUI.getCurrentFicha().getJ()); // pos
-                                cliente.sendUTF(ficha.getColor() + "" + ficha.getNumero()); // ficha
+                                cliente.sendUTF(ficha.getI() + " " + ficha.getJ()); // pos
+                                cliente.sendUTF(gameGUI.getCurrentFicha().getColor() + "" + gameGUI.getCurrentFicha().getNumero()); // ficha
                                 cliente.sendUTF(comodin); // isComodin
+                                // Ficha temp = new Ficha();
+                                // temp.morph(ficha);
+                                // ficha.morph(gameGUI.getCurrentFicha());
+                                // gameGUI.getCurrentFicha().morph(temp);
+                                if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
+                                gameGUI.switchHasMoved();
+                                gameGUI.setCurrentFicha(null);
+                                gameGUI.setCurrentFichaPos(false);
+                            }else{
+                                gameGUI.setCurrentFicha((Ficha) evt.getSource());
+                                gameGUI.setCurrentFichaPos(true);
                             }
-                            comodin = "0";
-                            if (ficha.getComodin()) comodin = "1";
-                            cliente.sendInt(9); // opcode
-                            cliente.sendUTF(ficha.getI() + " " + ficha.getJ()); // pos
-                            cliente.sendUTF(gameGUI.getCurrentFicha().getColor() + "" + gameGUI.getCurrentFicha().getNumero()); // ficha
-                            cliente.sendUTF(comodin); // isComodin
-                            // Ficha temp = new Ficha();
-                            // temp.morph(ficha);
-                            // ficha.morph(gameGUI.getCurrentFicha());
-                            // gameGUI.getCurrentFicha().morph(temp);
-                            if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
-                            gameGUI.setCurrentFicha(null);
-                            gameGUI.setCurrentFichaPos(false);
-                        }else{
-                            gameGUI.setCurrentFicha((Ficha) evt.getSource());
-                            gameGUI.setCurrentFichaPos(true);
                         }
                     }
                 });

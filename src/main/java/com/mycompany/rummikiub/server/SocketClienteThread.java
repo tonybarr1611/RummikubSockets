@@ -147,6 +147,63 @@ public class SocketClienteThread extends Thread{
                             hilo.sendUTF(ficha);
                             hilo.sendUTF(isComodin);
                     }
+                    partida.registrarMovimiento(pos, ficha, isComodin);
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void terminarTurno(){
+        ArrayList<Partida> partidas = server.getPartidas();
+        for (Partida partida : partidas) {
+            if (partida.getJugadores().contains(cliente)){
+                partida.terminarTurno();
+            }
+        }
+    }
+
+    private void sumaCarta(){
+        try {
+            ArrayList<Partida> partidas = server.getPartidas();
+            for (Partida partida : partidas) {
+                if (partida.getJugadores().contains(cliente)){
+                    partida.skipTurno();
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void sendWin(){
+        try {
+            ArrayList<Partida> partidas = server.getPartidas();
+            for (Partida partida : partidas) {
+                if (partida.getJugadores().contains(cliente)){
+                    partida.sendWin(username);
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void iniciar_anticipado(){
+        ArrayList<Partida> partidas = server.getPartidas();
+        for (Partida partida : partidas) {
+            if (partida.getJugadores().contains(cliente)){
+                partida.setCantidadJugadores(partida.getJugadoresActuales());
+                server.iniciarPartida(partida.getNombre(), partida.getHost());
+            }
+        }
+    }
+
+    private void kick_player(){
+        try {
+            String jugador = entrada.readUTF();
+            ArrayList<Partida> partidas = server.getPartidas();
+            for (Partida partida : partidas) {
+                if (partida.getJugadores().contains(cliente)){
+                    partida.kickPlayer(Integer.parseInt(jugador));
                 }
             }
         } catch (Exception e) {
@@ -187,6 +244,8 @@ public class SocketClienteThread extends Thread{
                     case 0004:
                         crear_Part();
                         break;
+                    case 7:
+                        iniciar_anticipado();
                     case 8:
                         join_Part();
                         break;
@@ -196,6 +255,18 @@ public class SocketClienteThread extends Thread{
                     case 1:
                         System.out.println("recibido 1");
                         salida.writeInt(2);
+                        break;
+                    case 66:
+                        kick_player();
+                        break;
+                    case 88:
+                        terminarTurno();
+                        break;
+                    case 91:
+                        sumaCarta();
+                        break;
+                    case 101:
+                        sendWin();
                         break;
                     default:
                         System.out.println("Codigo de operacion no reconocido");

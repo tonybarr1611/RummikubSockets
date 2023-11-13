@@ -93,11 +93,21 @@ public class LobbyWindow extends javax.swing.JFrame {
         btnJugador1.setForeground(new java.awt.Color(255, 255, 255));
         btnJugador1.setText("Kick");
         getContentPane().add(btnJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, -1, -1));
+        btnJugador1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kick_player(0);
+            }
+        });
 
         btnJugador2.setBackground(new java.awt.Color(51, 51, 51));
         btnJugador2.setForeground(new java.awt.Color(255, 255, 255));
         btnJugador2.setText("Kick");
         getContentPane().add(btnJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, -1, -1));
+        btnJugador2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kick_player(1);
+            }
+        });
 
         lblJugador2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblJugador2.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,6 +123,11 @@ public class LobbyWindow extends javax.swing.JFrame {
         btnJugador3.setForeground(new java.awt.Color(255, 255, 255));
         btnJugador3.setText("Kick");
         getContentPane().add(btnJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, -1, -1));
+        btnJugador3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kick_player(2);
+            }
+        });
 
         lblJugador4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblJugador4.setForeground(new java.awt.Color(255, 255, 255));
@@ -123,6 +138,11 @@ public class LobbyWindow extends javax.swing.JFrame {
         btnJugador4.setForeground(new java.awt.Color(255, 255, 255));
         btnJugador4.setText("Kick");
         getContentPane().add(btnJugador4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, -1, -1));
+        btnJugador4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kick_player(3);
+            }
+        });
 
         btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/Cerrar.png"))); // NOI18N
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -147,6 +167,11 @@ public class LobbyWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void kick_player(int index){
+        cliente.getClienteSocketThread().sendInt(66);
+        cliente.getClienteSocketThread().sendUTF(index + "");
+    }
+
     public ChatPanel getChatPanel(){
         return chatPanel1;
     }
@@ -161,6 +186,10 @@ public class LobbyWindow extends javax.swing.JFrame {
 
     public int getCantidadJugadores(){
         return cantidadJugadores;
+    }
+
+    public void setCantidadJugadores(int cantidadJugadores){
+        this.cantidadJugadores = cantidadJugadores;
     }
 
     public ArrayList<String> getJugadores(){
@@ -190,8 +219,13 @@ public class LobbyWindow extends javax.swing.JFrame {
             jugadoresLabels[i].setVisible(true);
             jugadoresButtons[i].setVisible(true);
         }
-        btnIniciar.setEnabled(false);
-        btnCerrar.setEnabled(false);        
+        if (host.equals(username)){
+            btnIniciar.setEnabled(true);
+            btnCerrar.setEnabled(true);
+        }else{
+            btnIniciar.setEnabled(false);
+            btnCerrar.setEnabled(false);
+        }        
     }
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
@@ -199,7 +233,9 @@ public class LobbyWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        System.out.println("holap");
+        if (cantidadJugadores >= 2){
+            cliente.getClienteSocketThread().sendInt(7);
+        }
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
