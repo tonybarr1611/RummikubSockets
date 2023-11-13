@@ -130,7 +130,7 @@ public class GameGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTerminarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarTurnoActionPerformed
-        clienteApp.sendInt(1);
+        clienteApp.sendInt(88);
     }//GEN-LAST:event_btnTerminarTurnoActionPerformed
 
     public void registerMove(String codigoFicha, String pos, String comodin){

@@ -153,6 +153,15 @@ public class SocketClienteThread extends Thread{
         } catch (Exception e) {
         }
     }
+
+    public void terminarTurno(){
+        ArrayList<Partida> partidas = server.getPartidas();
+        for (Partida partida : partidas) {
+            if (partida.getJugadores().contains(cliente)){
+                partida.terminarTurno();
+            }
+        }
+    }
     
 
     @Override
@@ -197,6 +206,9 @@ public class SocketClienteThread extends Thread{
                     case 1:
                         System.out.println("recibido 1");
                         salida.writeInt(2);
+                        break;
+                    case 88:
+                        terminarTurno();
                         break;
                     default:
                         System.out.println("Codigo de operacion no reconocido");

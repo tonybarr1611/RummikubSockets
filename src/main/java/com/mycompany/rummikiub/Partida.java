@@ -25,6 +25,12 @@ public class Partida {
         jugadoresNombres = new ArrayList<String>();
         hilosJugadores = new ArrayList<SocketClienteThread>();
         mazo = new ArrayList<String>();
+        for (int i = 0; i < 6; i++){
+            for (int j = 0; j < 18; j++){
+                matriz[i][j] = "tablero-1";
+                matrizBackup[i][j] = "tablero-1";
+            }
+        }
         String colores[] = {"rojo", "azul", "nara", "negr"};
         for (int i = 0; i < 4; i++){
             for (int j = 1; j < 14; j++){
@@ -48,6 +54,12 @@ public class Partida {
         hilosJugadores = new ArrayList<SocketClienteThread>();
         hilosJugadores.add(hilo);
         mazo = new ArrayList<String>();
+        for (int i = 0; i < 6; i++){
+            for (int j = 0; j < 18; j++){
+                matriz[i][j] = "tablero-1";
+                matrizBackup[i][j] = "tablero-1";
+            }
+        }
         String colores[] = {"rojo", "azul", "nara", "negr"};
         for (int i = 0; i < 4; i++){
             for (int j = 1; j < 14; j++){
@@ -75,6 +87,11 @@ public class Partida {
     }
 
     public void sendTurnos(){
+        for (int i = 0; i < 6; i++){
+            for (int j = 0; j < 18; j++){
+                matrizBackup[i][j] = matriz[i][j];
+            }
+        }
         for (int i = 0; i < hilosJugadores.size(); i++){
             if (i != turno){ // no host
                 hilosJugadores.get(i).sendInt(15);
@@ -87,6 +104,28 @@ public class Partida {
             turno = 0;
         else
             turno++;
+    }
+
+    public void terminarTurno(){
+        if (checkMatrix()){
+            sendTurnos();
+        }else{
+            for (int i = 0; i < 6; i++){
+                for (int j = 0; j < 18; j++){
+                    matriz[i][j] = matrizBackup[i][j];
+                    for(int k = 0; k < hilosJugadores.size(); k++){
+                        hilosJugadores.get(k).sendInt(9);
+                        hilosJugadores.get(k).sendUTF(i + " " + j);
+                        hilosJugadores.get(k).sendUTF(matriz[i][j]);
+                        if (matriz[i][j].contains("como"))
+                            hilosJugadores.get(k).sendUTF("1");
+                        else
+                            hilosJugadores.get(k).sendUTF("0");
+                    }
+                }
+            }
+            sendTurnos();
+        }
     }
 
     public void registrarMovimiento(String pos, String ficha, String isComodin){
