@@ -162,6 +162,18 @@ public class SocketClienteThread extends Thread{
             }
         }
     }
+
+    private void sumaCarta(){
+        try {
+            ArrayList<Partida> partidas = server.getPartidas();
+            for (Partida partida : partidas) {
+                if (partida.getJugadores().contains(cliente)){
+                    partida.skipTurno();
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
     
 
     @Override
@@ -209,6 +221,9 @@ public class SocketClienteThread extends Thread{
                         break;
                     case 88:
                         terminarTurno();
+                        break;
+                    case 91:
+                        sumaCarta();
                         break;
                     default:
                         System.out.println("Codigo de operacion no reconocido");

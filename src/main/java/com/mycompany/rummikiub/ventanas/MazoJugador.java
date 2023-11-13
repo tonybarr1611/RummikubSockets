@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author barra
  */
-public class MazoJugador extends javax.swing.JPanel {
+public class MazoJugador extends javax.swing.JPanel implements Cloneable{
     ArrayList<Ficha> fichas = new ArrayList<Ficha>();
     /**
      * Creates new form MazoJugador
@@ -60,6 +60,14 @@ public class MazoJugador extends javax.swing.JPanel {
         this.repaint();
     }
 
+    public MazoJugador Clone(){
+        MazoJugador mazo = new MazoJugador();
+        for (Ficha ficha : fichas) {
+            if (ficha.getComodin()) mazo.addFicha("como");
+            else mazo.addFicha(ficha.getColor() + "" + ficha.getNumero());
+        }
+        return mazo;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

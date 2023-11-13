@@ -27,6 +27,7 @@ public class GameGUI extends javax.swing.JFrame {
 
     private boolean turno = false;
     private ArrayList<String> mazoBackup = new ArrayList<String>();
+    private MazoJugador mazoClone = new MazoJugador();
     
     /**
      * Creates new form testing
@@ -132,7 +133,10 @@ public class GameGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTerminarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarTurnoActionPerformed
-        clienteApp.sendInt(88);
+        if (mazoBackup.size() == mazoJugador2.getFichas().size())
+            clienteApp.sendInt(91);
+        else
+            clienteApp.sendInt(88);
     }//GEN-LAST:event_btnTerminarTurnoActionPerformed
 
     public void registerMove(String codigoFicha, String pos, String comodin){
@@ -176,16 +180,14 @@ public class GameGUI extends javax.swing.JFrame {
     }
 
     public void updateBackupMazo(){
-        mazoBackup.clear();
-        for (int i = 0; i < mazoJugador2.getFichas().size(); i++){
-            mazoBackup.add(mazoJugador2.getFichas().get(i).getColor() + "" + mazoJugador2.getFichas().get(i).getNumero());
-        }
+        mazoClone = mazoJugador2.Clone();
     }
 
     public void turnoNoHost(String index){
         btnTerminarTurno.setEnabled(false);
         turno = false;
         currentFicha = null;
+        updateBackupMazo();
     }
 
     public void turnoHost(){
@@ -219,26 +221,22 @@ public class GameGUI extends javax.swing.JFrame {
         return turno;
     }
 
+    public void addCarta(String ficha){
+        mazoJugador2.addFicha(ficha);
+    }
+
     public void revertMazo(){
-        mazoJugador2.clearFichas();
+        remove(mazoJugador2);
+        mazoJugador2 = mazoClone;
+        getContentPane().add(mazoJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 580, 1220, 180));
+        // mazoJugador2.setBackground(new java.awt.Color(0, 0, 0, 0));
+        // mazoJugador2.setOpaque(false);
+
         mazoJugador2.revalidate();
         mazoJugador2.repaint();
-        remove(mazoJugador2);
-        mazoJugador2 = new MazoJugador();
-        add(mazoJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 580, 1220, 180));
-        mazoJugador2.setBackground(new java.awt.Color(0, 0, 0, 0));
-        mazoJugador2.setOpaque(false);
-        for (int i = 0; i < mazoBackup.size(); i++){
-            if (mazoBackup.get(i).contains("como"))
-                mazoJugador2.addFicha("como");
-            else if (mazoBackup.get(i).contains("tab"))
-                mazoJugador2.addFicha("tablero-1");
-            else
-                mazoJugador2.addFicha(mazoBackup.get(i));
-            System.out.println(mazoJugador2.getFichas().get(i).getColor() + "" + mazoJugador2.getFichas().get(i).getNumero());
-            mazoJugador2.getFichas().get(i).setI(-1);
-            mazoJugador2.getFichas().get(i).setJ(-1);
-            mazoJugador2.getFichas().get(i).addActionListener(new java.awt.event.ActionListener() {
+        ArrayList<Ficha> fichas = mazoJugador2.getFichas();
+        for (Ficha ficha : fichas) {
+            ficha.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     if (getTurno()){
                         currentFicha = (Ficha) evt.getSource();
@@ -247,8 +245,6 @@ public class GameGUI extends javax.swing.JFrame {
                     }
                 }
             });
-            mazoJugador2.getFichas().get(i).revalidate();
-            mazoJugador2.getFichas().get(i).repaint();
         }
     }
 

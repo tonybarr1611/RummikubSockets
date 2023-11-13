@@ -170,6 +170,16 @@ public class ClienteSocketThread extends Thread{
         ((GameGUI) clienteApp.getCurrentWindow()).revertMazo();
     }
 
+    private void sumaCarta(){
+        try {
+            String carta = entrada.readUTF();
+            if (clienteApp.getCurrentWindow() instanceof GameGUI) {
+                ((GameGUI) clienteApp.getCurrentWindow()).addCarta(carta);
+            }
+        } catch (Exception e) {
+        }
+    }
+
     @Override
     public void run() {
         try {
@@ -210,6 +220,9 @@ public class ClienteSocketThread extends Thread{
                             break;
                         case 16:
                             turnoHost();
+                            break;
+                        case 91:
+                            sumaCarta();
                             break;
                         case 92:
                             revertMazo();
