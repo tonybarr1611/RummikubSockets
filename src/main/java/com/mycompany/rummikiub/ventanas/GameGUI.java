@@ -26,6 +26,7 @@ public class GameGUI extends javax.swing.JFrame {
     private boolean currentFichaPos = false;
 
     private boolean turno = false;
+    private boolean hasMoved = false;
     private ArrayList<String> mazoBackup = new ArrayList<String>();
     private MazoJugador mazoClone = new MazoJugador();
     
@@ -133,7 +134,7 @@ public class GameGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTerminarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarTurnoActionPerformed
-        if (mazoBackup.size() == mazoJugador2.getFichas().size())
+        if (!hasMoved)
             clienteApp.sendInt(91);
         else
             clienteApp.sendInt(88);
@@ -179,14 +180,29 @@ public class GameGUI extends javax.swing.JFrame {
         }
     }
 
+    public void switchHasMoved(){
+        hasMoved = true;
+    }
+
+    public boolean getHasMoved(){
+        return hasMoved;
+    }
+
     public void updateBackupMazo(){
         mazoClone = mazoJugador2.Clone();
+    }
+
+    public void sendWin(){
+        clienteApp.sendInt(101);
     }
 
     public void turnoNoHost(String index){
         btnTerminarTurno.setEnabled(false);
         turno = false;
         currentFicha = null;
+        hasMoved = false;
+        if (mazoJugador2.getFichas().size() == 0)
+            sendWin();
         updateBackupMazo();
     }
 
@@ -194,6 +210,9 @@ public class GameGUI extends javax.swing.JFrame {
         btnTerminarTurno.setEnabled(true);
         turno = true;
         currentFicha = null;
+        hasMoved = false;
+        if (mazoJugador2.getFichas().size() == 0)
+            sendWin();
         updateBackupMazo();
     }
 

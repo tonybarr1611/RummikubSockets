@@ -71,6 +71,10 @@ public class Partida {
         mazo.add("como");
     }
 
+    public void setCantidadJugadores(int cantidadJugadores) {
+        this.cantidadJugadores = cantidadJugadores;
+    }
+
     public void repartirCartas(SocketClienteThread hilo){
         for (int i = 0; i < 14; i++){
             int random = (int) (Math.random() * mazo.size());
@@ -90,6 +94,21 @@ public class Partida {
         jugadores.add(cliente);
         jugadoresNombres.add(hilo.getUsername());
         hilosJugadores.add(hilo);
+    }
+
+    public void kickPlayer(int index){
+        hilosJugadores.get(index).sendInt(100);
+        hilosJugadores.remove(index);
+        jugadores.remove(index);
+        jugadoresNombres.remove(index);
+        cantidadJugadores--;
+    }
+
+    public void sendWin(String username){
+        for (SocketClienteThread hilo : hilosJugadores){
+            hilo.sendInt(101);
+            hilo.sendUTF(username);
+        }
     }
 
     public void sendTurnos(){
@@ -115,8 +134,13 @@ public class Partida {
     public void skipTurno(){
         for (SocketClienteThread hilo : hilosJugadores)
                 hilo.sendInt(92);
-        hilosJugadores.get(turno - 1).sendInt(91);
-        hilosJugadores.get(turno - 1).sendUTF(getCarta());
+        if (turno == 0){
+            hilosJugadores.get(hilosJugadores.size() - 1).sendInt(91);
+            hilosJugadores.get(hilosJugadores.size() - 1).sendUTF(getCarta());
+        }else{
+            hilosJugadores.get(turno - 1).sendInt(91);
+            hilosJugadores.get(turno - 1).sendUTF(getCarta());
+        }
         sendTurnos();
     }
 
@@ -299,7 +323,7 @@ public class Partida {
                     numero = Integer.parseInt(matriz[i][j].substring(4));
                     if (matriz[i][j+1].substring(4).equals((numero+1) + "")){
                         for (int k = j + 1; k < 18; k++){
-                            if (matriz[i][k].contains("como") || (matriz[i][k].contains("azul") && matriz[i][k].equals((numero+1) + ""))){
+                            if (matriz[i][k].contains("como") || (matriz[i][k].contains("azul") && matriz[i][k].substring(4).equals((numero+1) + ""))){
                                 cont++;
                                 numero++;
                             }else{
@@ -349,7 +373,7 @@ public class Partida {
                     numero = Integer.parseInt(matriz[i][j].substring(4));
                     if (matriz[i][j+1].substring(4).equals((numero+1) + "")){
                         for (int k = j + 1; k < 18; k++){
-                            if (matriz[i][k].contains("como") || (matriz[i][k].contains("nara") && matriz[i][k].equals((numero+1) + ""))){
+                            if (matriz[i][k].contains("como") || (matriz[i][k].contains("nara") && matriz[i][k].substring(4).equals((numero+1) + ""))){
                                 cont++;
                                 numero++;
                             }else{
@@ -368,7 +392,7 @@ public class Partida {
                         ArrayList<String> colores = new ArrayList<String>();
                         colores.add("rojo");
                         colores.add("negr");
-                        colores.add("nara");
+                        colores.add("azul");
                         for (int k = j + 1; k < 18; k++){
                             if (matriz[i][k].contains("como") || (!(matriz[i][k].contains("tab")) && matriz[i][k].substring(4).equals((numero) + ""))){
                                 for(String color : colores){

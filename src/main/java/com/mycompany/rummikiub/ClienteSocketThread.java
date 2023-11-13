@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.mycompany.rummikiub.ventanas.GameGUI;
 import com.mycompany.rummikiub.ventanas.HomeWindow;
 import com.mycompany.rummikiub.ventanas.LobbyWindow;
@@ -118,6 +120,13 @@ public class ClienteSocketThread extends Thread{
     }
 
     private void cargar_Part(){
+        String cantidadJugadoresSt = "";
+        try {
+            cantidadJugadoresSt = entrada.readUTF();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         ArrayList<String> mazo = new ArrayList<String>();
         for (int i = 0; i < 14; i++) {
             try {
@@ -127,12 +136,25 @@ public class ClienteSocketThread extends Thread{
             } catch (Exception e) {
             }
         }
-        int cantidadJugadores = ((LobbyWindow)clienteApp.getCurrentWindow()).getCantidadJugadores();
+        int cantidadJugadores = Integer.parseInt(cantidadJugadoresSt);
         ArrayList<String> jugadores = ((LobbyWindow)clienteApp.getCurrentWindow()).getJugadores();
         clienteApp.getCurrentWindow().dispose();
         clienteApp.setCurrentWindow(new GameGUI(cliente, clienteApp, username, cantidadJugadores, jugadores, mazo));
         clienteApp.getCurrentWindow().setVisible(true);
         return;
+    }
+
+    private void cargar_Part_anticipado(){
+        try {
+            ((LobbyWindow)clienteApp.getCurrentWindow()).setCantidadJugadores(Integer.parseInt(entrada.readUTF()));
+            cargar_Part();
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private void registerMove(){
@@ -180,6 +202,24 @@ public class ClienteSocketThread extends Thread{
         }
     }
 
+    private void displayWin(String username){
+        JOptionPane.showMessageDialog(null, "El jugador " + username + " ha ganado la partida");
+        clienteApp.getCurrentWindow().dispose();
+        clienteApp.setCurrentWindow(new HomeWindow(cliente, clienteApp));
+        clienteApp.getCurrentWindow().setVisible(true);
+    }
+
+    private void kick(){
+        ((LobbyWindow)clienteApp.getCurrentWindow()).dispose();
+        JOptionPane.showMessageDialog(null, "Has sido expulsado de la partida");
+        try {
+            cliente.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
         try {
@@ -209,6 +249,9 @@ public class ClienteSocketThread extends Thread{
                         case 0007:
                             cargar_Part();
                             break;
+                        case 8:
+                            cargar_Part_anticipado();
+                            break;
                         case 9:
                             registerMove();
                             break;
@@ -226,6 +269,12 @@ public class ClienteSocketThread extends Thread{
                             break;
                         case 92:
                             revertMazo();
+                            break;
+                        case 100:
+                            kick();
+                            break;
+                        case 101:
+                            displayWin(entrada.readUTF());
                             break;
                         default:
                             System.out.println("Codigo de operacion no reconocido: " + opCode);

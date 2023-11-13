@@ -74,6 +74,7 @@ public class GameGrid extends javax.swing.JPanel {
                                 // ficha.morph(gameGUI.getCurrentFicha());
                                 // gameGUI.getCurrentFicha().morph(temp);
                                 if (!gameGUI.getCurrentFichaPos()) gameGUI.removeFicha();
+                                gameGUI.switchHasMoved();
                                 gameGUI.setCurrentFicha(null);
                                 gameGUI.setCurrentFichaPos(false);
                             }else{
