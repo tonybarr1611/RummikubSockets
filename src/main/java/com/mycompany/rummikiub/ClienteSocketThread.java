@@ -166,6 +166,10 @@ public class ClienteSocketThread extends Thread{
         }
     }
 
+    private void revertMazo(){
+        ((GameGUI) clienteApp.getCurrentWindow()).revertMazo();
+    }
+
     @Override
     public void run() {
         try {
@@ -206,6 +210,9 @@ public class ClienteSocketThread extends Thread{
                             break;
                         case 16:
                             turnoHost();
+                            break;
+                        case 92:
+                            revertMazo();
                             break;
                         default:
                             System.out.println("Codigo de operacion no reconocido: " + opCode);

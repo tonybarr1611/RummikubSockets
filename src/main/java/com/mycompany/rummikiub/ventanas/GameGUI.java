@@ -26,6 +26,7 @@ public class GameGUI extends javax.swing.JFrame {
     private boolean currentFichaPos = false;
 
     private boolean turno = false;
+    private ArrayList<String> mazoBackup = new ArrayList<String>();
     
     /**
      * Creates new form testing
@@ -51,6 +52,7 @@ public class GameGUI extends javax.swing.JFrame {
         this.cantidadJugadores = cantidadJugadores;
         this.jugadores = jugadores;
         this.mazoJugador = mazoJugador;
+        mazoBackup = (ArrayList<String>)mazoJugador.clone();
         for (int i = 0; i < 6; i++){
             for (int j = 0; j < 18; j++){
                 matrizJuego[i][j] = "T";
@@ -125,7 +127,7 @@ public class GameGUI extends javax.swing.JFrame {
 
         bgImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/rummikiub/assets/gameBackground.jpg"))); // NOI18N
         getContentPane().add(bgImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1220, 770));
-
+        updateBackupMazo();
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -167,11 +169,16 @@ public class GameGUI extends javax.swing.JFrame {
 
     public void removeFicha(){
         try {
-            mazoJugador2.remove(currentFicha);
-            mazoJugador2.revalidate();
-            mazoJugador2.repaint();
+            mazoJugador2.removeFicha(currentFicha);
         } catch (Exception e) {
             // TODO: handle exception
+        }
+    }
+
+    public void updateBackupMazo(){
+        mazoBackup.clear();
+        for (int i = 0; i < mazoJugador2.getFichas().size(); i++){
+            mazoBackup.add(mazoJugador2.getFichas().get(i).getColor() + "" + mazoJugador2.getFichas().get(i).getNumero());
         }
     }
 
@@ -185,6 +192,7 @@ public class GameGUI extends javax.swing.JFrame {
         btnTerminarTurno.setEnabled(true);
         turno = true;
         currentFicha = null;
+        updateBackupMazo();
     }
 
     public Ficha getCurrentFicha(){
@@ -209,6 +217,39 @@ public class GameGUI extends javax.swing.JFrame {
 
     public boolean getTurno(){
         return turno;
+    }
+
+    public void revertMazo(){
+        mazoJugador2.clearFichas();
+        mazoJugador2.revalidate();
+        mazoJugador2.repaint();
+        remove(mazoJugador2);
+        mazoJugador2 = new MazoJugador();
+        add(mazoJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 580, 1220, 180));
+        mazoJugador2.setBackground(new java.awt.Color(0, 0, 0, 0));
+        mazoJugador2.setOpaque(false);
+        for (int i = 0; i < mazoBackup.size(); i++){
+            if (mazoBackup.get(i).contains("como"))
+                mazoJugador2.addFicha("como");
+            else if (mazoBackup.get(i).contains("tab"))
+                mazoJugador2.addFicha("tablero-1");
+            else
+                mazoJugador2.addFicha(mazoBackup.get(i));
+            System.out.println(mazoJugador2.getFichas().get(i).getColor() + "" + mazoJugador2.getFichas().get(i).getNumero());
+            mazoJugador2.getFichas().get(i).setI(-1);
+            mazoJugador2.getFichas().get(i).setJ(-1);
+            mazoJugador2.getFichas().get(i).addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    if (getTurno()){
+                        currentFicha = (Ficha) evt.getSource();
+                        currentFichaPos = false;
+                        System.out.println("Ficha clickeada " + currentFicha.getColor());
+                    }
+                }
+            });
+            mazoJugador2.getFichas().get(i).revalidate();
+            mazoJugador2.getFichas().get(i).repaint();
+        }
     }
 
     /**

@@ -121,8 +121,11 @@ public class Partida {
                             hilosJugadores.get(k).sendUTF("1");
                         else
                             hilosJugadores.get(k).sendUTF("0");
+                        }
                     }
                 }
+            for (SocketClienteThread hilo : hilosJugadores) {
+                hilo.sendInt(92);
             }
             sendTurnos();
         }

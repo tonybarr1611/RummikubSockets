@@ -44,6 +44,22 @@ public class MazoJugador extends javax.swing.JPanel {
         return fichas;
     }
 
+    public void removeFicha(Ficha ficha){
+        fichas.remove(ficha);
+        this.remove(ficha);
+        this.revalidate();
+        this.repaint();
+    }
+
+    public void clearFichas(){
+        for (Ficha ficha : fichas) {
+            this.remove(ficha);
+        }
+        fichas.clear();
+        this.revalidate();
+        this.repaint();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
